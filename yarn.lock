@@ -4411,6 +4411,11 @@ class-utils@^0.3.5:
     isobject "^3.0.0"
     static-extend "^0.1.1"
 
+classnames@^2.3.1:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.3.1.tgz#dfcfa3891e306ec1dad105d0e88f4417b8535e8e"
+  integrity sha512-OlQdbZ7gLfGarSqxesMesDa5uz7KFbID8Kpq/SxIoNGDqY8lSYs0D+hhtBXhcdB3rcbXArFr7vlHheLk1voeNA==
+
 clean-css@^4.2.3:
   version "4.2.4"
   resolved "https://registry.yarnpkg.com/clean-css/-/clean-css-4.2.4.tgz#733bf46eba4e607c6891ea57c24a989356831178"
@@ -10268,6 +10273,11 @@ store2@^2.12.0:
   version "2.13.2"
   resolved "https://registry.yarnpkg.com/store2/-/store2-2.13.2.tgz#01ad8802ca5b445b9c316b55e72645c13a3cd7e3"
   integrity sha512-CMtO2Uneg3SAz/d6fZ/6qbqqQHi2ynq6/KzMD/26gTkiEShCcpqFfTHgOxsE0egAq6SX3FmN4CeSqn8BzXQkJg==
+
+storybook-css-modules@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/storybook-css-modules/-/storybook-css-modules-1.0.7.tgz#034352b3cc7bf697ec35268c7d788fa6518902db"
+  integrity sha512-rpAm4sJe7ZvYs1+TTU3BSkN6e/zfR5oZk+OFPXTZAgXEtPX5ONksrLPGEV8UyF2nb/uOOqMMEAPxG6tEuw7Vxg==
 
 stream-browserify@^2.0.1:
   version "2.0.2"

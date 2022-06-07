@@ -1,1 +1,3 @@
-export interface AutoCompleteProps {}
+export interface AutoCompleteProps {
+  suggestions: string[];
+}
