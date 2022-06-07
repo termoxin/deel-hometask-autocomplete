@@ -9,13 +9,13 @@ module.exports = {
     "@storybook/addon-links",
     "@storybook/addon-essentials",
     "@storybook/addon-interactions",
-    "storybook-css-modules",
+    "@storybook/preset-scss",
   ],
   framework: "@storybook/react",
   core: {
     builder: "@storybook/builder-webpack5",
   },
-  webpackFinal: async (config, { configType }) => {
+  webpackFinal: async (config) => {
     config.resolve.alias = {
       ...config.resolve.alias,
       "@/pages": path.resolve(__dirname, "../pages"),

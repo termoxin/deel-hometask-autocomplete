@@ -1,6 +1,6 @@
 import * as NextImage from "next/image";
 
-import "@/styles/global.css";
+import "@/styles/globals.scss";
 
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },

@@ -6,9 +6,6 @@ import { AutoComplete } from "@/components/AutoComplete";
 export default {
   title: "Example/AutoComplete",
   component: AutoComplete,
-  argTypes: {
-    backgroundColor: { control: "color" },
-  },
 } as ComponentMeta<typeof AutoComplete>;
 
 const Template: ComponentStory<typeof AutoComplete> = (args) => (

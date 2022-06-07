@@ -1,11 +1,19 @@
-import { ChangeEvent, FC, KeyboardEvent, MouseEvent, useState } from "react";
+import {
+  ChangeEvent,
+  FC,
+  KeyboardEvent,
+  MouseEvent,
+  useRef,
+  useState,
+} from "react";
+import cx from "classnames";
 
 import { AutoCompleteProps } from "./AutoComplete.types";
-
 import s from "./AutoComplete.module.scss";
 
 export const AutoComplete: FC<AutoCompleteProps> = ({ suggestions }) => {
   const [active, setActive] = useState(0);
+
   const [filtered, setFiltered] = useState<AutoCompleteProps["suggestions"]>(
     []
   );
@@ -13,11 +21,14 @@ export const AutoComplete: FC<AutoCompleteProps> = ({ suggestions }) => {
   const [isShow, setIsShow] = useState(false);
   const [input, setInput] = useState("");
 
+  const autoCompleteRef = useRef<HTMLUListElement | null>(null);
+
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     const input = e.currentTarget.value;
     const newFilteredSuggestions = suggestions.filter(
       (suggestion) => suggestion.toLowerCase().indexOf(input.toLowerCase()) > -1
     );
+
     setActive(0);
     setFiltered(newFilteredSuggestions);
     setIsShow(true);
@@ -31,6 +42,18 @@ export const AutoComplete: FC<AutoCompleteProps> = ({ suggestions }) => {
     setInput(e.currentTarget.innerText);
   };
 
+  const currentAutoComplete = autoCompleteRef.current;
+
+  const scrollToActiveItem = (index: number) => {
+    if (currentAutoComplete) {
+      const item = currentAutoComplete.children.item(index);
+
+      if (item) {
+        item.scrollIntoView({ block: "nearest" });
+      }
+    }
+  };
+
   const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.keyCode === 13) {
       // enter key
@@ -39,10 +62,12 @@ export const AutoComplete: FC<AutoCompleteProps> = ({ suggestions }) => {
       setInput(filtered[active]);
     } else if (e.keyCode === 38) {
       // up arrow
+      scrollToActiveItem(active - 1);
       return active === 0 ? null : setActive(active - 1);
     } else if (e.keyCode === 40) {
       // down arrow
-      return active - 1 === filtered.length ? null : setActive(active + 1);
+      scrollToActiveItem(active + 1);
+      return filtered.length - 1 === active ? null : setActive(active + 1);
     }
   };
 
@@ -50,24 +75,24 @@ export const AutoComplete: FC<AutoCompleteProps> = ({ suggestions }) => {
     if (isShow && input) {
       if (filtered.length) {
         return (
-          <ul className={s.autocomplete}>
-            {filtered.map((suggestion, index) => {
-              let className;
-              if (index === active) {
-                className = "active";
-              }
-              return (
-                <li className={className} key={suggestion} onClick={onClick}>
-                  {suggestion}
-                </li>
-              );
-            })}
+          <ul ref={autoCompleteRef} className={s.autocomplete}>
+            {filtered.map((suggestion, index) => (
+              <li
+                className={cx(s.autocomplete_item, {
+                  [s.autocomplete_item__active]: index === active,
+                })}
+                key={suggestion}
+                onClick={onClick}
+              >
+                <>{suggestion}</>
+              </li>
+            ))}
           </ul>
         );
       } else {
         return (
-          <div className="no-autocomplete">
-            <em>Not found</em>
+          <div className={s.autocomplete_no_autocomplete}>
+            <p>Nothing was found</p>
           </div>
         );
       }
@@ -78,6 +103,7 @@ export const AutoComplete: FC<AutoCompleteProps> = ({ suggestions }) => {
   return (
     <>
       <input
+        className={s.autocomplete_input}
         type="text"
         onChange={onChange}
         onKeyDown={onKeyDown}
