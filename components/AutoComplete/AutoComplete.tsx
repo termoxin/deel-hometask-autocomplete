@@ -3,6 +3,7 @@ import {
   FC,
   KeyboardEvent,
   MouseEvent,
+  useEffect,
   useRef,
   useState,
 } from "react";
@@ -21,7 +22,25 @@ export const AutoComplete: FC<AutoCompleteProps> = ({ suggestions }) => {
   const [isShow, setIsShow] = useState(false);
   const [input, setInput] = useState("");
 
-  const autoCompleteRef = useRef<HTMLUListElement | null>(null);
+  const autoCompleteListRef = useRef<HTMLUListElement | null>(null);
+  const autoCompleteRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const clickOutside = (e: Event) => {
+      if (autoCompleteRef && autoCompleteRef.current) {
+        const ref = autoCompleteRef.current;
+        const target = e.target;
+
+        if (target && !ref.contains(target as Node)) {
+          setIsShow(false);
+        }
+      }
+    };
+
+    document.addEventListener("click", clickOutside);
+
+    return () => document.removeEventListener("click", clickOutside);
+  }, []);
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     const input = e.currentTarget.value;
@@ -42,7 +61,12 @@ export const AutoComplete: FC<AutoCompleteProps> = ({ suggestions }) => {
     setInput(e.currentTarget.innerText);
   };
 
-  const currentAutoComplete = autoCompleteRef.current;
+  const onFocus = () => {
+    setIsShow(true);
+    console.log("show");
+  };
+
+  const currentAutoComplete = autoCompleteListRef.current;
 
   const scrollToActiveItem = (index: number) => {
     if (currentAutoComplete) {
@@ -75,11 +99,11 @@ export const AutoComplete: FC<AutoCompleteProps> = ({ suggestions }) => {
     if (isShow && input) {
       if (filtered.length) {
         return (
-          <ul ref={autoCompleteRef} className={s.autocomplete}>
+          <ul ref={autoCompleteListRef} className={s.autocomplete_list}>
             {filtered.map((suggestion, index) => (
               <li
-                className={cx(s.autocomplete_item, {
-                  [s.autocomplete_item__active]: index === active,
+                className={cx(s.autocomplete_list_item, {
+                  [s.autocomplete_list_item__active]: index === active,
                 })}
                 key={suggestion}
                 onClick={onClick}
@@ -101,15 +125,16 @@ export const AutoComplete: FC<AutoCompleteProps> = ({ suggestions }) => {
   };
 
   return (
-    <>
+    <div ref={autoCompleteRef}>
       <input
         className={s.autocomplete_input}
         type="text"
         onChange={onChange}
         onKeyDown={onKeyDown}
+        onFocus={onFocus}
         value={input}
       />
       {renderAutocomplete()}
-    </>
+    </div>
   );
 };
