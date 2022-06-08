@@ -1,31 +1,36 @@
 .autocomplete {
-  background: #fff;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
-  list-style: none;
-  margin-top: 0;
-  max-height: 216px;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding-left: 0;
   width: calc(300px + 1rem);
-  border-radius: 0px 0px 7px 7px;
-  color: #4c4c4c;
+
+  &_list {
+    background: #fff;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
+    list-style: none;
+    margin-top: 0;
+    max-height: 216px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-left: 0;
+    border-radius: 0px 0px 7px 7px;
+    color: #4c4c4c;
+
+    &_item {
+      padding: 15px;
+
+      &:hover {
+        background-color: var(--autocomplete-item-active);
+        cursor: pointer;
+      }
+
+      &__active {
+        background-color: var(--autocomplete-item-active);
+        cursor: pointer;
+      }
+    }
+  }
 
   &_no_autocomplete {
     color: var(--gray);
     padding: 8px;
-  }
-
-  &_item {
-    &:hover {
-      background-color: var(--autocomplete-item-active);
-      cursor: pointer;
-    }
-
-    &__active {
-      background-color: var(--autocomplete-item-active);
-      cursor: pointer;
-    }
   }
 
   &_input {
@@ -37,9 +42,5 @@
     border-radius: 7px;
     font-size: 17px;
     color: #4c4c4c;
-  }
-
-  li {
-    padding: 15px;
   }
 }
