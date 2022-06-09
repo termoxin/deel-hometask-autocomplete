@@ -21,6 +21,7 @@ module.exports = {
       "@/pages": path.resolve(__dirname, "../pages"),
       "@/components": path.resolve(__dirname, "../components"),
       "@/styles": path.resolve(__dirname, "../styles"),
+      "@/utils": path.resolve(__dirname, "../utils"),
     };
 
     return config;

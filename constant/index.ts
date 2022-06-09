@@ -1,0 +1,1 @@
+export const DEFAULT_PLACES_FETCHING_LIMIT = 8;

@@ -1,5 +1,5 @@
 .autocomplete {
-  width: calc(300px + 1rem);
+  width: calc(400px + 1rem);
 
   &_list {
     background: #fff;
@@ -14,7 +14,7 @@
     color: #4c4c4c;
 
     &_item {
-      padding: 15px;
+      padding: 10px 15px;
 
       &:hover {
         background-color: var(--autocomplete-item-active);
@@ -35,7 +35,7 @@
 
   &_input {
     padding: 15px;
-    width: calc(300px + 1rem);
+    width: calc(400px + 1rem);
     border-bottom: none;
     border: none;
     background: #f8f8f8;

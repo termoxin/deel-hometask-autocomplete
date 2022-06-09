@@ -1,8 +1,7 @@
 import {
   ChangeEvent,
-  FC,
   KeyboardEvent,
-  MouseEvent,
+  useCallback,
   useEffect,
   useRef,
   useState,
@@ -10,15 +9,29 @@ import {
 import cx from "classnames";
 
 import { AutoCompleteProps } from "./AutoComplete.types";
+import {
+  AUTOCOMPLETE_INPUT_TEST_ID,
+  AUTOCOMPLETE_LIST_TEST_ID,
+} from "./AutoComplete.constant";
+
+import { throttle } from "@/utils/throttle";
+
 import s from "./AutoComplete.module.scss";
 
-export const AutoComplete: FC<AutoCompleteProps> = ({ suggestions }) => {
+export const AutoComplete = <S,>({
+  suggestions,
+  inputPlaceholder,
+  renderItem,
+  onChange,
+  onEnter,
+  onClick,
+  throttleTime,
+  className,
+  inputClass,
+  listClassName,
+  itemClassName,
+}: AutoCompleteProps<S>) => {
   const [active, setActive] = useState(0);
-
-  const [filtered, setFiltered] = useState<AutoCompleteProps["suggestions"]>(
-    []
-  );
-
   const [isShow, setIsShow] = useState(false);
   const [input, setInput] = useState("");
 
@@ -42,33 +55,38 @@ export const AutoComplete: FC<AutoCompleteProps> = ({ suggestions }) => {
     return () => document.removeEventListener("click", clickOutside);
   }, []);
 
-  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const input = e.currentTarget.value;
-    const newFilteredSuggestions = suggestions.filter(
-      (suggestion) => suggestion.toLowerCase().indexOf(input.toLowerCase()) > -1
-    );
+  const throttledOnChange = useCallback(
+    throttle((value: string) => onChange && onChange(value), throttleTime),
+    []
+  );
 
+  const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setActive(0);
-    setFiltered(newFilteredSuggestions);
     setIsShow(true);
     setInput(e.currentTarget.value);
+
+    if (onChange) {
+      throttledOnChange(e.currentTarget.value);
+    }
   };
 
-  const onClick = (e: MouseEvent<HTMLLIElement>) => {
+  const onClickHandler = (searchValue: string, index: number) => () => {
     setActive(0);
-    setFiltered([]);
     setIsShow(false);
-    setInput(e.currentTarget.innerText);
+    setInput(searchValue);
+
+    if (onClick) {
+      onClick(suggestions[index]);
+    }
   };
 
   const onFocus = () => {
     setIsShow(true);
-    console.log("show");
   };
 
-  const currentAutoComplete = autoCompleteListRef.current;
-
   const scrollToActiveItem = (index: number) => {
+    const currentAutoComplete = autoCompleteListRef.current;
+
     if (currentAutoComplete) {
       const item = currentAutoComplete.children.item(index);
 
@@ -79,36 +97,57 @@ export const AutoComplete: FC<AutoCompleteProps> = ({ suggestions }) => {
   };
 
   const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.keyCode === 13) {
+    if (e.code === "Enter") {
       // enter key
       setActive(0);
       setIsShow(false);
-      setInput(filtered[active]);
-    } else if (e.keyCode === 38) {
+      setInput(suggestions[active].label);
+
+      if (onEnter) {
+        onEnter(suggestions[active]);
+      }
+    } else if (e.code === "ArrowUp") {
       // up arrow
-      scrollToActiveItem(active - 1);
-      return active === 0 ? null : setActive(active - 1);
-    } else if (e.keyCode === 40) {
+
+      if (active === 0) {
+        scrollToActiveItem(suggestions.length - 1);
+        setActive(suggestions.length - 1);
+      } else {
+        setActive(active - 1);
+        scrollToActiveItem(active - 1);
+      }
+    } else if (e.code === "ArrowDown") {
       // down arrow
-      scrollToActiveItem(active + 1);
-      return filtered.length - 1 === active ? null : setActive(active + 1);
+      if (active === suggestions.length - 1) {
+        scrollToActiveItem(0);
+        setActive(0);
+      } else {
+        setActive(active + 1);
+        scrollToActiveItem(active + 1);
+      }
     }
   };
 
   const renderAutocomplete = () => {
     if (isShow && input) {
-      if (filtered.length) {
+      if (suggestions.length) {
         return (
-          <ul ref={autoCompleteListRef} className={s.autocomplete_list}>
-            {filtered.map((suggestion, index) => (
+          <ul
+            data-testid={AUTOCOMPLETE_LIST_TEST_ID}
+            ref={autoCompleteListRef}
+            className={cx(s.autocomplete_list, listClassName)}
+          >
+            {suggestions.map((suggestion, index) => (
               <li
-                className={cx(s.autocomplete_list_item, {
+                role="listitem"
+                className={cx(s.autocomplete_list_item, itemClassName, {
                   [s.autocomplete_list_item__active]: index === active,
                 })}
-                key={suggestion}
-                onClick={onClick}
+                aria-current={index === active}
+                key={suggestion.id}
+                onClick={onClickHandler(suggestion.label, index)}
               >
-                <>{suggestion}</>
+                {renderItem(suggestion)}
               </li>
             ))}
           </ul>
@@ -125,16 +164,24 @@ export const AutoComplete: FC<AutoCompleteProps> = ({ suggestions }) => {
   };
 
   return (
-    <div ref={autoCompleteRef}>
+    <div className={cx(s.autocomplete, className)} ref={autoCompleteRef}>
       <input
-        className={s.autocomplete_input}
+        data-testid={AUTOCOMPLETE_INPUT_TEST_ID}
+        className={cx(s.autocomplete_input, inputClass)}
         type="text"
-        onChange={onChange}
+        value={input}
+        placeholder={inputPlaceholder}
+        onChange={onChangeHandler}
         onKeyDown={onKeyDown}
         onFocus={onFocus}
-        value={input}
       />
       {renderAutocomplete()}
     </div>
   );
+};
+
+AutoComplete.defaultProps = {
+  inputPlaceholder: "",
+  suggestions: [],
+  throttleTime: 500,
 };

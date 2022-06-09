@@ -3,4 +3,7 @@
 
 // Used for __tests__/testing-library.js
 // Learn more: https://github.com/testing-library/jest-dom
-import '@testing-library/jest-dom/extend-expect'
+import "@testing-library/jest-dom/extend-expect";
+
+// scrollIntoView is not implemented in jsdom, therefore it's mocked for tests
+window.HTMLElement.prototype.scrollIntoView = function () {};
