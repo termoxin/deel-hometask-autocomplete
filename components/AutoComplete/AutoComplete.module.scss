@@ -1,33 +1,6 @@
 .autocomplete {
   width: calc(400px + 1rem);
 
-  &_list {
-    background: var(--autocomplete-list-background);
-    color: var(--autocomplete-list-color);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-    list-style: none;
-    margin-top: 0;
-    max-height: 216px;
-    overflow-y: auto;
-    overflow-x: hidden;
-    padding-left: 0;
-    border-radius: 0px 0px 7px 7px;
-    width: 100%;
-
-    &_item {
-      padding: 10px 15px;
-      cursor: pointer;
-
-      &:hover {
-        background-color: var(--autocomplete-item-hover);
-      }
-
-      &__active {
-        background-color: var(--autocomplete-item-active);
-      }
-    }
-  }
-
   &_input {
     padding: 15px;
     width: 100%;
@@ -37,10 +10,5 @@
     border-radius: 7px;
     font-size: 17px;
     color: var(--autocomplete-input-color);
-  }
-
-  &_no_autocomplete {
-    color: var(--gray);
-    padding: 8px;
   }
 }

@@ -1,1 +1,2 @@
 export const DEFAULT_PLACES_FETCHING_LIMIT = 10;
+export const DEFAULT_THROTTLE_TIME = 500;

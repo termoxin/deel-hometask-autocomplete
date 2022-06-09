@@ -10,7 +10,6 @@ import {
 import { AutoCompleteProps } from "./AutoComplete.types";
 
 import { useMockedAsyncSuggestionsProps } from "@/test-helpers/suggestions";
-import { wait } from "@testing-library/user-event/dist/types/utils";
 
 type AutoCompleteWrapperProps = Omit<AutoCompleteProps, "suggestions">;
 

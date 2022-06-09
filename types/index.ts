@@ -28,3 +28,8 @@ export interface Place {
 }
 
 export type PlacesResponse = Place[];
+
+export type SuggestionBaseProps = {
+  id: string;
+  label: string;
+};

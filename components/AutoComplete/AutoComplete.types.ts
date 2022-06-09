@@ -1,7 +1,4 @@
-export type SuggestionBaseProps = {
-  id: string;
-  label: string;
-};
+import { SuggestionBaseProps } from "@/types/index";
 
 export interface AutoCompleteProps<S = SuggestionBaseProps> {
   suggestions: (S & SuggestionBaseProps)[];

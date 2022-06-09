@@ -8,15 +8,15 @@ import {
 } from "react";
 import cx from "classnames";
 
-import { AutoCompleteProps, SuggestionBaseProps } from "./AutoComplete.types";
-import {
-  AUTOCOMPLETE_INPUT_TEST_ID,
-  AUTOCOMPLETE_LIST_TEST_ID,
-} from "./AutoComplete.constant";
-
+import { AutoCompleteProps } from "./AutoComplete.types";
 import { throttle } from "@/utils/throttle";
 
+import { AUTOCOMPLETE_INPUT_TEST_ID } from "./AutoComplete.constant";
+
 import s from "./AutoComplete.module.scss";
+import { SuggestionBaseProps } from "@/types/index";
+import { AutoCompleteList } from "../AutoCompleteList/AutoCompleteList";
+import { DEFAULT_THROTTLE_TIME } from "@/constant";
 
 export const AutoComplete = <S,>({
   suggestions,
@@ -34,6 +34,7 @@ export const AutoComplete = <S,>({
   itemClassName,
 }: AutoCompleteProps<S>) => {
   const [active, setActive] = useState(0);
+  const [selected, setSelected] = useState<number | undefined>(undefined);
   const [isShow, setIsShow] = useState(false);
   const [input, setInput] = useState("");
 
@@ -62,114 +63,85 @@ export const AutoComplete = <S,>({
     []
   );
 
-  const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    setActive(0);
-    setIsShow(true);
-    setInput(e.currentTarget.value);
+  const onChangeHandler = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      setActive(0);
+      setIsShow(true);
+      setInput(e.currentTarget.value);
 
-    if (onChange) {
-      throttledOnChange(e.currentTarget.value);
-    }
-  };
+      if (onChange) {
+        throttledOnChange(e.currentTarget.value);
+      }
+    },
+    [setActive, setIsShow, setInput, onChange, throttledOnChange]
+  );
 
-  const onClickHandler = (searchValue: string, index: number) => () => {
-    setActive(0);
-    setIsShow(false);
-    setInput(searchValue);
+  const onClickHandler = useCallback(
+    (searchValue: string, index: number) => () => {
+      setActive(0);
+      setIsShow(false);
+      setSelected(index);
+      setInput(searchValue);
 
-    if (onClick) {
-      onClick(suggestions[index]);
-    }
-  };
+      if (onClick) {
+        onClick(suggestions[index]);
+      }
+    },
+    [setActive, setIsShow, setInput, onClick, suggestions]
+  );
 
-  const onFocusHandler = () => {
+  const onFocusHandler = useCallback(() => {
     setIsShow(true);
 
     if (onFocus) {
       onFocus();
     }
-  };
+  }, [setIsShow, onFocus]);
 
-  const scrollToActiveItem = (index: number) => {
-    const currentAutoComplete = autoCompleteListRef.current;
-
-    if (currentAutoComplete) {
-      const item = currentAutoComplete.children.item(index);
-
-      if (item) {
-        item.scrollIntoView({ block: "nearest" });
-      }
+  const onEnterHandler = useCallback(() => {
+    if (suggestions[active] && input) {
+      setActive(0);
+      setIsShow(false);
+      setSelected(active);
+      setInput(suggestions[active].label);
     }
-  };
 
-  const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.code === "Enter") {
-      // enter key
-      if (suggestions[active]) {
-        setInput(suggestions[active].label);
-        setActive(0);
-        setIsShow(false);
-      }
-
-      if (onEnter && suggestions[active]) {
-        onEnter(suggestions[active]);
-      }
-    } else if (e.code === "ArrowUp") {
-      // up arrow
-
-      if (active === 0) {
-        scrollToActiveItem(suggestions.length - 1);
-        setActive(suggestions.length - 1);
-      } else {
-        setActive(active - 1);
-        scrollToActiveItem(active - 1);
-      }
-    } else if (e.code === "ArrowDown") {
-      // down arrow
-      if (active === suggestions.length - 1) {
-        scrollToActiveItem(0);
-        setActive(0);
-      } else {
-        setActive(active + 1);
-        scrollToActiveItem(active + 1);
-      }
+    if (onEnter && suggestions[active] && input) {
+      onEnter(suggestions[active]);
     }
-  };
+  }, [suggestions, active, input, onEnter, setInput, setActive, setIsShow]);
 
-  const renderAutocomplete = () => {
-    if (isShow && input) {
-      if (suggestions.length) {
-        return (
-          <ul
-            data-testid={AUTOCOMPLETE_LIST_TEST_ID}
-            ref={autoCompleteListRef}
-            className={cx(s.autocomplete_list, listClassName)}
-          >
-            {suggestions.map((suggestion, index) => (
-              <li
-                key={suggestion.id}
-                role="listitem"
-                aria-current={index === active}
-                onClick={onClickHandler(suggestion.label, index)}
-                className={cx(s.autocomplete_list_item, itemClassName, {
-                  [s.autocomplete_list_item__active]: index === active,
-                })}
-              >
-                {renderItem && renderItem(suggestion)}
-              </li>
-            ))}
-          </ul>
-        );
-      } else {
-        return (
-          <div className={s.autocomplete_no_autocomplete}>
-            <p>Nothing was found</p>
-          </div>
-        );
-      }
+  const onArrowUpHandler = useCallback(() => {
+    if (active === 0) {
+      setSelected(active);
+      setActive(suggestions.length - 1);
+    } else {
+      setActive(active - 1);
     }
-    return <></>;
-  };
+  }, [suggestions, active, setActive]);
+
+  const onArrowDownHandler = useCallback(() => {
+    if (active === suggestions.length - 1) {
+      setActive(0);
+    } else {
+      setActive(active + 1);
+    }
+  }, [suggestions, active, setActive]);
+
+  const onKeyDownHandler = useCallback(
+    (e: KeyboardEvent<HTMLInputElement>) => {
+      if (e.code === "Enter") {
+        onEnterHandler();
+      } else if (e.code === "ArrowUp") {
+        onArrowUpHandler();
+      } else if (e.code === "ArrowDown") {
+        onArrowDownHandler();
+      }
+    },
+    [onEnterHandler, onArrowUpHandler, onArrowDownHandler]
+  );
+
+  const onClickInputHandler = () => setIsShow(true);
 
   return (
     <div className={cx(s.autocomplete, className)} ref={autoCompleteRef}>
@@ -180,11 +152,23 @@ export const AutoComplete = <S,>({
         value={input}
         placeholder={inputPlaceholder}
         onChange={onChangeHandler}
-        onKeyDown={onKeyDown}
+        onKeyDown={onKeyDownHandler}
         onFocus={onFocusHandler}
+        onClick={onClickInputHandler}
         onBlur={onBlur}
       />
-      {renderAutocomplete()}
+      {isShow && input && (
+        <AutoCompleteList
+          suggestions={suggestions}
+          active={active}
+          selected={selected}
+          renderItem={renderItem}
+          onClickItem={onClickHandler}
+          listRef={autoCompleteListRef}
+          listClassName={listClassName}
+          itemClassName={itemClassName}
+        />
+      )}
     </div>
   );
 };
@@ -192,6 +176,6 @@ export const AutoComplete = <S,>({
 AutoComplete.defaultProps = {
   inputPlaceholder: "",
   suggestions: [],
-  throttleTime: 500,
+  throttleTime: DEFAULT_THROTTLE_TIME,
   renderItem: (suggestion: SuggestionBaseProps) => <>{suggestion.label}</>,
 };
