@@ -7,6 +7,7 @@ import {
   AutoCompleteProps,
   SuggestionBaseProps,
 } from "@/components/AutoComplete/AutoComplete.types";
+import { useMockedAsyncSuggestionsProps } from "@/test-helpers/suggestions";
 
 export default {
   title: "Example/AutoComplete",
@@ -14,29 +15,7 @@ export default {
 } as ComponentMeta<typeof AutoComplete>;
 
 const Template: ComponentStory<FC<AutoCompleteProps>> = (args) => {
-  const [suggestions, setSuggestions] = useState<SuggestionBaseProps[]>([]);
-
-  const suggestionsFilter =
-    (suggestion: SuggestionBaseProps) => (value: string) =>
-      suggestion.label.toLowerCase().indexOf(value.toLowerCase()) > -1;
-
-  const fetchSuggestions = (
-    value: string
-  ): Promise<{ id: string; label: string }[]> =>
-    new Promise((resolve, reject) => {
-      try {
-        const filteredSuggestions = args.suggestions.filter(suggestionsFilter);
-
-        resolve(filteredSuggestions);
-      } catch (err) {
-        reject((err as Error).message);
-      }
-    });
-
-  const onChange = async (value: string) => {
-    const data = await fetchSuggestions(value);
-    setSuggestions(data);
-  };
+  const { suggestions, onChange } = useMockedAsyncSuggestionsProps();
 
   return (
     <AutoComplete {...args} suggestions={suggestions} onChange={onChange} />

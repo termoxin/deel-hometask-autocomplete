@@ -1,9 +1,17 @@
 :root {
   --white: #fff;
-  --black: #000;
   --gray: #999;
   --blue: #f2f9fc;
+  --quartz: #4c4c4c;
+  --tinted-white: #f8f8f8;
 
   // Autocomplete component variables
   --autocomplete-item-active: var(--blue);
+  --autocomplete-item-hover: var(--blue);
+
+  --autocomplete-list-background: var(--white);
+  --autocomplete-list-color: var(--quartz);
+
+  --autocomplete-input-background: var(--tinted-white);
+  --autocomplete-input-color: var(--quartz);
 }

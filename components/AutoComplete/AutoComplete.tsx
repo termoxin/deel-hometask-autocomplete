@@ -8,7 +8,7 @@ import {
 } from "react";
 import cx from "classnames";
 
-import { AutoCompleteProps } from "./AutoComplete.types";
+import { AutoCompleteProps, SuggestionBaseProps } from "./AutoComplete.types";
 import {
   AUTOCOMPLETE_INPUT_TEST_ID,
   AUTOCOMPLETE_LIST_TEST_ID,
@@ -25,6 +25,8 @@ export const AutoComplete = <S,>({
   onChange,
   onEnter,
   onClick,
+  onFocus,
+  onBlur,
   throttleTime,
   className,
   inputClass,
@@ -80,8 +82,12 @@ export const AutoComplete = <S,>({
     }
   };
 
-  const onFocus = () => {
+  const onFocusHandler = () => {
     setIsShow(true);
+
+    if (onFocus) {
+      onFocus();
+    }
   };
 
   const scrollToActiveItem = (index: number) => {
@@ -99,11 +105,13 @@ export const AutoComplete = <S,>({
   const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.code === "Enter") {
       // enter key
-      setActive(0);
-      setIsShow(false);
-      setInput(suggestions[active].label);
+      if (suggestions[active]) {
+        setInput(suggestions[active].label);
+        setActive(0);
+        setIsShow(false);
+      }
 
-      if (onEnter) {
+      if (onEnter && suggestions[active]) {
         onEnter(suggestions[active]);
       }
     } else if (e.code === "ArrowUp") {
@@ -139,15 +147,15 @@ export const AutoComplete = <S,>({
           >
             {suggestions.map((suggestion, index) => (
               <li
+                key={suggestion.id}
                 role="listitem"
+                aria-current={index === active}
+                onClick={onClickHandler(suggestion.label, index)}
                 className={cx(s.autocomplete_list_item, itemClassName, {
                   [s.autocomplete_list_item__active]: index === active,
                 })}
-                aria-current={index === active}
-                key={suggestion.id}
-                onClick={onClickHandler(suggestion.label, index)}
               >
-                {renderItem(suggestion)}
+                {renderItem && renderItem(suggestion)}
               </li>
             ))}
           </ul>
@@ -173,7 +181,8 @@ export const AutoComplete = <S,>({
         placeholder={inputPlaceholder}
         onChange={onChangeHandler}
         onKeyDown={onKeyDown}
-        onFocus={onFocus}
+        onFocus={onFocusHandler}
+        onBlur={onBlur}
       />
       {renderAutocomplete()}
     </div>
@@ -184,4 +193,5 @@ AutoComplete.defaultProps = {
   inputPlaceholder: "",
   suggestions: [],
   throttleTime: 500,
+  renderItem: (suggestion: SuggestionBaseProps) => <>{suggestion.label}</>,
 };
