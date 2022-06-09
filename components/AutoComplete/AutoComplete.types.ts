@@ -1,10 +1,10 @@
-export type BaseProps = {
+export type SuggestionBaseProps = {
   id: string;
   label: string;
 };
 
-export interface AutoCompleteProps<S = BaseProps> {
-  suggestions: (S & BaseProps)[];
+export interface AutoCompleteProps<S = SuggestionBaseProps> {
+  suggestions: (S & SuggestionBaseProps)[];
   inputPlaceholder?: string;
   throttleTime?: number;
   renderItem: (props: S) => React.ReactElement;

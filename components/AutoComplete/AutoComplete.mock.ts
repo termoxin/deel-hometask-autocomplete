@@ -1,16 +1,16 @@
-import { BaseProps } from "./AutoComplete.types";
+import { SuggestionBaseProps } from "./AutoComplete.types";
 
-export const mockSuggestions: BaseProps[] = [
-  { id: "0,", label: "Alabama" },
-  { id: "1,", label: "Alaska" },
-  { id: "2,", label: "American Samoa" },
-  { id: "3,", label: "Arizona" },
-  { id: "4,", label: "Arkansas" },
-  { id: "5,", label: "California" },
-  { id: "6,", label: "Colorado" },
+export const mockSuggestions: SuggestionBaseProps[] = [
+  { id: "0", label: "Alabama" },
+  { id: "1", label: "Alaska" },
+  { id: "2", label: "American Samoa" },
+  { id: "3", label: "Arizona" },
+  { id: "4", label: "Arkansas" },
+  { id: "5", label: "California" },
+  { id: "6", label: "Colorado" },
   { id: "7", label: "Connecticut" },
   { id: "8", label: "Delaware" },
-  { id: "9,", label: "District Of Columbia" },
+  { id: "9", label: "District Of Columbia" },
   { id: "10", label: "Federated States Of Micronesia" },
   { id: "11", label: "Florida" },
   { id: "12", label: "Georgia" },
