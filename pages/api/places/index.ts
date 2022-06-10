@@ -26,7 +26,7 @@ export default async function places(
       const response = await fetch(builtUrl).then((r) => r.json());
 
       return res.send(
-        response.features.map(({ id, place_name, properties }: any) => ({
+        response.features?.map(({ id, place_name, properties }: any) => ({
           id,
           placeName: place_name,
           properties: properties,
