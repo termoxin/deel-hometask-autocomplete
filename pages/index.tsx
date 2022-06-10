@@ -47,36 +47,38 @@ export default function Index() {
   const properties = selectedSuggestion?.properties;
 
   return (
-    <div className={s.container}>
+    <>
       <Head>
         <title>AutoComplete component Demo</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>
-        <AutoCompletePlaces
-          inputPlaceholder="Type a place name..."
-          suggestions={transformedSuggestions}
-          onChange={(searchValue) => fetchSuggestions(searchValue)}
-          throttleTime={500}
-          listClassName={s.custom_autocomplete_list}
-          onEnter={onSelected}
-          onClick={onSelected}
-        />
-        {selectedSuggestion && (
-          <div className={s.selected_item_details}>
-            <h3>🌍 {selectedSuggestion?.placeName}</h3>
-            <div>
-              {properties &&
-                Object.entries(properties).map(([key, value]) => (
-                  <p key={key}>
-                    {key}: {renderPropertyValue(value)}
-                  </p>
-                ))}
+      <div className={s.container}>
+        <main>
+          <AutoCompletePlaces
+            inputPlaceholder="Type a place name..."
+            suggestions={transformedSuggestions}
+            onChange={(searchValue) => fetchSuggestions(searchValue)}
+            throttleTime={500}
+            listClassName={s.custom_autocomplete_list}
+            onEnter={onSelected}
+            onClick={onSelected}
+          />
+          {selectedSuggestion && (
+            <div className={s.selected_item_details}>
+              <h3>🌍 {selectedSuggestion?.placeName}</h3>
+              <div>
+                {properties &&
+                  Object.entries(properties).map(([key, value]) => (
+                    <p key={key}>
+                      {key}: {renderPropertyValue(value)}
+                    </p>
+                  ))}
+              </div>
             </div>
-          </div>
-        )}
-      </main>
-    </div>
+          )}
+        </main>
+      </div>
+    </>
   );
 }
