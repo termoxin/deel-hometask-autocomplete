@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import { mockSuggestions } from "@/components/AutoComplete/AutoComplete.mock";
-import { SuggestionBaseProps } from "@/components/AutoComplete/AutoComplete.types";
+import { SuggestionBaseProps } from "@/types/index";
 
 const suggestionsFilter =
   (value: string) => (suggestion: SuggestionBaseProps) =>

@@ -1,12 +1,10 @@
-import React, { FC, useState } from "react";
+import React, { FC } from "react";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { SuggestionBaseProps } from "@/types/index";
 
 import { AutoComplete } from "@/components/AutoComplete";
 import { mockSuggestions } from "@/components/AutoComplete/AutoComplete.mock";
-import {
-  AutoCompleteProps,
-  SuggestionBaseProps,
-} from "@/components/AutoComplete/AutoComplete.types";
+import { AutoCompleteProps } from "@/components/AutoComplete/AutoComplete.types";
 import { useMockedAsyncSuggestionsProps } from "@/test-helpers/suggestions";
 
 export default {
