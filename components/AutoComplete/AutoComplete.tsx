@@ -79,6 +79,12 @@ export const AutoComplete = <S,>({
 
   const onClickHandler = useCallback(
     (searchValue: string, index: number) => () => {
+      const selectedText = window?.getSelection()?.toString();
+
+      if (selectedText?.trim()) {
+        return;
+      }
+
       setActive(0);
       setIsShow(false);
       setSelected(index);
