@@ -19,20 +19,20 @@ export const AutoCompleteList = <S,>({
   listClassName,
   listRef,
 }: AutoCompleteListProps<S>) => {
+  const scrollToActiveItem = useCallback(
+    (index: number) => scrollToItemIndex(listRef.current, index),
+    [listRef]
+  );
+
   useEffect(() => {
     scrollToActiveItem(active);
-  }, [active]);
+  }, [active, scrollToActiveItem]);
 
   useEffect(() => {
     if (selected) {
       scrollToActiveItem(selected);
     }
-  }, [selected]);
-
-  const scrollToActiveItem = useCallback(
-    (index: number) => scrollToItemIndex(listRef.current, index),
-    [selected, listRef]
-  );
+  }, [selected, scrollToActiveItem]);
 
   const onMouseOverHandler = (index: number) => () => setActive(index);
 

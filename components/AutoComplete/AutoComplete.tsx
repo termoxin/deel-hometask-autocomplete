@@ -58,9 +58,10 @@ export const AutoComplete = <S,>({
     return () => document.removeEventListener("click", clickOutside);
   }, []);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const throttledOnChange = useCallback(
     throttle((value: string) => onChange && onChange(value), throttleTime),
-    []
+    [onChange, throttleTime]
   );
 
   const onChangeHandler = useCallback(
