@@ -5,6 +5,7 @@ import { AUTOCOMPLETE_LIST_TEST_ID } from "../AutoComplete/AutoComplete.constant
 import { AutoCompleteListProps } from "./AutoCompleteList.types";
 
 import s from "./AutoCompleteList.module.scss";
+import { scrollToItemIndex } from "@/utils/scroll";
 
 export const AutoCompleteList = <S,>({
   suggestions,
@@ -28,17 +29,7 @@ export const AutoCompleteList = <S,>({
   }, [selected]);
 
   const scrollToActiveItem = useCallback(
-    (index: number) => {
-      const currentAutoComplete = listRef.current;
-
-      if (currentAutoComplete) {
-        const item = currentAutoComplete.children.item(index);
-
-        if (item) {
-          item.scrollIntoView({ block: "nearest" });
-        }
-      }
-    },
+    (index: number) => scrollToItemIndex(listRef.current, index),
     [selected, listRef]
   );
 
