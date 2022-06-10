@@ -13,6 +13,7 @@ export function throttle<T extends unknown[]>(
     if (cancelled) return;
     const delta = Date.now() - last;
     last = Date.now();
+
     if (start) {
       start = false;
       callback.apply(this, args);

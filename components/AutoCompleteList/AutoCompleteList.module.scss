@@ -1,4 +1,6 @@
 .list {
+  position: absolute;
+
   background: var(--autocomplete-list-background);
   color: var(--autocomplete-list-color);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);

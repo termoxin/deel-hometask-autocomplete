@@ -1,46 +1,52 @@
 import Head from "next/head";
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 import { PlacesResponse, Place } from "types/index";
 
 import { AutoComplete } from "@/components/AutoComplete";
 
 import s from "@/pages/index.module.scss";
+import { AutoCompletePlaceItem } from "@/components/AutoCompletePlaceItem";
 
 export default function Index() {
   const [suggestions, setSuggestions] = useState<PlacesResponse>([]);
+  const [selectedSuggestion, setSelectedSuggestion] = useState<Place>();
 
-  const renderItem = (place: Place) => {
-    const { placeName, properties } = place;
+  const transformedSuggestions = useMemo(
+    () =>
+      suggestions.map((suggestion) => ({
+        ...suggestion,
+        id: suggestion.id,
+        label: suggestion.placeName,
+      })),
+    [suggestions]
+  );
 
-    return (
-      <p>
-        {properties?.category && (
-          <>
-            <span className={s.custom_autocomplete_category}>
-              📌 <b>{properties?.category}</b>
-            </span>
-            <br />
-          </>
-        )}
-        <span>{placeName}</span>
-      </p>
-    );
+  const fetchSuggestions = useCallback(
+    async (searchValue: string) => {
+      const response = await fetch(`/api/places?search=${searchValue}`).then(
+        (r) => r.json()
+      );
+
+      setSuggestions(response);
+    },
+    [setSuggestions]
+  );
+
+  const onSelected = useCallback(
+    (place: Place) => setSelectedSuggestion(place),
+    [setSelectedSuggestion]
+  );
+
+  const renderPropertyValue = (value: unknown) => {
+    if (typeof value === "boolean") {
+      return value ? "✅" : "❌";
+    }
+
+    return value.toString();
   };
 
-  const transformedSuggestions = suggestions.map((suggestion) => ({
-    ...suggestion,
-    id: suggestion.id,
-    label: suggestion.placeName,
-  }));
-
-  const fetchSuggestions = async (searchValue: string) => {
-    const response = await fetch(`/api/places?search=${searchValue}`).then(
-      (r) => r.json()
-    );
-
-    setSuggestions(response);
-  };
+  const properties = selectedSuggestion?.properties;
 
   return (
     <div className={s.container}>
@@ -53,13 +59,26 @@ export default function Index() {
         <AutoComplete
           inputPlaceholder="Type a place name..."
           suggestions={transformedSuggestions}
-          renderItem={renderItem}
+          renderItem={(place) => <AutoCompletePlaceItem place={place} />}
           onChange={(searchValue) => fetchSuggestions(searchValue)}
           throttleTime={500}
           listClassName={s.custom_autocomplete_list}
-          onEnter={console.log}
-          onClick={console.log}
+          onEnter={onSelected}
+          onClick={onSelected}
         />
+        {selectedSuggestion && (
+          <div className={s.selected_item_details}>
+            <h3>🌍 {selectedSuggestion?.placeName}</h3>
+            <div>
+              {properties &&
+                Object.entries(properties).map(([key, value]) => (
+                  <p key={key}>
+                    {key}: {renderPropertyValue(value)}
+                  </p>
+                ))}
+            </div>
+          </div>
+        )}
       </main>
     </div>
   );

@@ -1,4 +1,4 @@
-import { SuggestionBaseProps } from "./AutoComplete.types";
+import { SuggestionBaseProps } from "@/types/index";
 
 export const mockSuggestions: SuggestionBaseProps[] = [
   { id: "0", label: "Alabama" },
