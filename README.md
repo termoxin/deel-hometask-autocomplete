@@ -18,6 +18,12 @@ In your terminal, run the following command:
 # Install SDKs
 > yarn dlx @yarnpkg/sdks vscode
 
+## Copy .env.example and create .env.local to load environment variables
+
+> cp .env.example .env.local
+
+## Credentials that are saved in .env.example are public, so it's safe to have them in there, but in case you're gonna have your own credentials, DON'T store them in .env.example
+
 # Start app in dev
 > yarn dev
 
