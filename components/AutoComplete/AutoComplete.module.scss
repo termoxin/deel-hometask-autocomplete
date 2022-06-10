@@ -2,6 +2,10 @@
   position: relative;
   width: calc(400px + 1rem);
 
+  @media screen and (max-width: 640px) {
+    width: calc(280px + 1rem);
+  }
+
   &_input {
     padding: 15px;
     width: 100%;
