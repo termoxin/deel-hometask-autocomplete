@@ -12,6 +12,7 @@ export const AutoCompleteList = <S,>({
   renderItem,
   setActive,
   active,
+  input,
   selected,
   onClickItem,
   itemClassName,
@@ -54,7 +55,7 @@ export const AutoCompleteList = <S,>({
               [s.list_item__selected]: index === selected,
             })}
           >
-            {renderItem && renderItem(suggestion)}
+            {renderItem && renderItem(suggestion, input)}
           </li>
         ))}
       </ul>

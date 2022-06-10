@@ -1,3 +1,5 @@
+import React from "react";
+
 export interface ThrottleOptions {
   /**
    * Fire immediately on the first call.
@@ -33,3 +35,8 @@ export type SuggestionBaseProps = {
   id: string;
   label: string;
 };
+
+export type RenderItemFunction<P> = (
+  props: P,
+  search?: string
+) => React.ReactElement;

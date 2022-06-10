@@ -161,7 +161,8 @@ export const AutoComplete = <S,>({
         <AutoCompleteList
           suggestions={suggestions}
           active={active}
-          setActive={(index) => setActive(index)}
+          input={input}
+          setActive={setActive}
           selected={selected}
           renderItem={renderItem}
           onClickItem={onClickHandler}

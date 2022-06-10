@@ -1,10 +1,10 @@
-import { SuggestionBaseProps } from "@/types/index";
+import { SuggestionBaseProps, RenderItemFunction } from "@/types/index";
 
 export interface AutoCompleteProps<S = SuggestionBaseProps> {
   suggestions: (S & SuggestionBaseProps)[];
   inputPlaceholder?: string;
   throttleTime?: number;
-  renderItem?: (props: S) => React.ReactElement;
+  renderItem?: RenderItemFunction<S>;
   onChange?: (value: string) => void;
   onEnter?: (value: S) => void;
   onClick?: (value: S) => void;

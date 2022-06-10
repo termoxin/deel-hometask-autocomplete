@@ -38,13 +38,20 @@ export default function Index() {
     [setSelectedSuggestion]
   );
 
-  const renderPropertyValue = (value: unknown) => {
+  const renderPropertyValue = useCallback((value: any) => {
     if (typeof value === "boolean") {
       return value ? "✅" : "❌";
     }
 
-    return value.toString();
-  };
+    return value?.toString();
+  }, []);
+
+  const renderPlaceItem = useCallback(
+    (place: Place, search?: string) => (
+      <AutoCompletePlaceItem place={place} search={search} />
+    ),
+    []
+  );
 
   const properties = selectedSuggestion?.properties;
 
@@ -59,7 +66,7 @@ export default function Index() {
         <AutoComplete
           inputPlaceholder="Type a place name..."
           suggestions={transformedSuggestions}
-          renderItem={(place) => <AutoCompletePlaceItem place={place} />}
+          renderItem={renderPlaceItem}
           onChange={(searchValue) => fetchSuggestions(searchValue)}
           throttleTime={500}
           listClassName={s.custom_autocomplete_list}

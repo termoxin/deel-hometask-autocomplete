@@ -1,11 +1,14 @@
-import { FC } from "react";
+import { FC, memo } from "react";
 
 import { AutoCompletePlaceItemProps } from "./AutoCompletePlaceItem.types";
 
 import s from "./AutoCompletePlaceItem.module.scss";
+import { removeAccents } from "@/utils/removeAccents";
+import { Highlighter } from "../Hightlighter";
 
-export const AutoCompletePlaceItem: FC<AutoCompletePlaceItemProps> = ({
+const AutoCompletePlaceItemComponent: FC<AutoCompletePlaceItemProps> = ({
   place,
+  search,
 }) => {
   const { placeName, properties } = place;
 
@@ -19,7 +22,15 @@ export const AutoCompletePlaceItem: FC<AutoCompletePlaceItemProps> = ({
           <br />
         </>
       )}
-      <span>{placeName}</span>
+      <span>
+        <Highlighter
+          highlightClassName={s.highlighted}
+          highlight={search || ""}
+          value={placeName}
+        />
+      </span>
     </p>
   );
 };
+
+export const AutoCompletePlaceItem = memo(AutoCompletePlaceItemComponent);

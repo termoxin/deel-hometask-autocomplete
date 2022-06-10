@@ -3,6 +3,7 @@
   --gray: #999;
   --pink: #fde5e5;
   --blue: #f2f9fc;
+  --yellow: yellow;
   --quartz: #4c4c4c;
   --tinted-white: #f8f8f8;
 
@@ -16,4 +17,6 @@
 
   --autocomplete-input-background: var(--tinted-white);
   --autocomplete-input-color: var(--quartz);
+
+  --autocomplete-item-highlighted: var(--yellow);
 }
