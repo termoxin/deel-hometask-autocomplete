@@ -1,4 +1,4 @@
-import { render, waitFor } from "@testing-library/react";
+import { getAllByRole, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { FC } from "react";
 
@@ -25,22 +25,21 @@ const AutoCompleteWrapper: FC<AutoCompleteWrapperProps> = (props) => {
 
 describe("AutoComplete", () => {
   test("should render properly", () => {
-    const { getByTestId, queryByTestId } = render(
-      <AutoCompleteWrapper {...props} />
-    );
+    render(<AutoCompleteWrapper {...props} />);
 
-    expect(getByTestId(AUTOCOMPLETE_INPUT_TEST_ID)).toBeVisible();
-    expect(queryByTestId(AUTOCOMPLETE_LIST_TEST_ID)).toBeNull();
+    expect(screen.getByTestId(AUTOCOMPLETE_INPUT_TEST_ID)).toBeVisible();
+    expect(screen.queryByTestId(AUTOCOMPLETE_LIST_TEST_ID)).toBeNull();
 
     expect(
-      (getByTestId(AUTOCOMPLETE_INPUT_TEST_ID) as HTMLInputElement).placeholder
+      (screen.getByTestId(AUTOCOMPLETE_INPUT_TEST_ID) as HTMLInputElement)
+        .placeholder
     ).toBe(props.inputPlaceholder);
   });
 
   test("should input text", async () => {
-    const { getByTestId } = render(<AutoCompleteWrapper {...props} />);
+    render(<AutoCompleteWrapper {...props} />);
 
-    const input = getByTestId(AUTOCOMPLETE_INPUT_TEST_ID);
+    const input = screen.getByTestId(AUTOCOMPLETE_INPUT_TEST_ID);
 
     await userEvent.type(input, "Something");
 
@@ -48,42 +47,40 @@ describe("AutoComplete", () => {
   });
 
   test("should input text and show list", async () => {
-    const { getByTestId, getByText } = render(
-      <AutoCompleteWrapper {...props} />
-    );
-    const input = getByTestId(AUTOCOMPLETE_INPUT_TEST_ID);
+    render(<AutoCompleteWrapper {...props} />);
+    const input = screen.getByTestId(AUTOCOMPLETE_INPUT_TEST_ID);
 
     await userEvent.type(input, "South");
 
-    const list = getByTestId(AUTOCOMPLETE_LIST_TEST_ID);
+    await waitFor(() => {
+      expect(screen.getAllByRole("listitem")).toHaveLength(2);
+    });
 
     await waitFor(() => {
-      expect(list.children.length).toBe(2);
-      expect(getByText("South Dakota")).toBeVisible();
-      expect(getByText("South Carolina")).toBeVisible();
+      expect(screen.getByText("South Dakota")).toBeVisible();
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText("South Carolina")).toBeVisible();
     });
   });
 
   test("should be able to select items by arrow up and arrow down", async () => {
-    const { getByTestId, getByText, getByRole } = render(
-      <AutoCompleteWrapper {...props} />
-    );
+    render(<AutoCompleteWrapper {...props} />);
 
-    const input = getByTestId(AUTOCOMPLETE_INPUT_TEST_ID);
+    const input = screen.getByTestId(AUTOCOMPLETE_INPUT_TEST_ID);
 
     await userEvent.type(input, "Sou");
 
-    const list = getByTestId(AUTOCOMPLETE_LIST_TEST_ID);
-
     await waitFor(() => {
-      expect(list.children.length).toBe(3);
+      expect(screen.getAllByRole("listitem")).toHaveLength(3);
     });
 
-    expect(getByText("South Dakota")).toBeVisible();
-    expect(getByText("South Carolina")).toBeVisible();
-    expect(getByText("Missouri")).toBeVisible();
+    expect(screen.getByText("South Dakota")).toBeVisible();
+    expect(screen.getByText("South Carolina")).toBeVisible();
+    expect(screen.getByText("Missouri")).toBeVisible();
 
-    expect(getByRole("listitem", { current: true })).toHaveTextContent(
+    expect(screen.getByRole("listitem", { current: true })).toHaveTextContent(
       "Missouri"
     );
 
@@ -92,20 +89,20 @@ describe("AutoComplete", () => {
     await userEvent.keyboard("{arrowdown}");
     await userEvent.keyboard("{arrowdown}");
 
-    expect(getByRole("listitem", { current: true })).toHaveTextContent(
+    expect(screen.getByRole("listitem", { current: true })).toHaveTextContent(
       "South Carolina"
     );
 
     await userEvent.keyboard("{arrowup}");
     await userEvent.keyboard("{arrowup}");
 
-    expect(getByRole("listitem", { current: true })).toHaveTextContent(
+    expect(screen.getByRole("listitem", { current: true })).toHaveTextContent(
       "South Dakota"
     );
   });
 
   test("should render custom item", async () => {
-    const { getByText, getByTestId } = render(
+    render(
       <AutoCompleteWrapper
         {...props}
         renderItem={(suggestion) => (
@@ -116,12 +113,12 @@ describe("AutoComplete", () => {
       />
     );
 
-    const input = getByTestId(AUTOCOMPLETE_INPUT_TEST_ID);
+    const input = screen.getByTestId(AUTOCOMPLETE_INPUT_TEST_ID);
 
     await userEvent.type(input, "South Dakota");
 
     await waitFor(() => {
-      expect(getByText("Id: 48 State: South Dakota")).toBeVisible();
+      expect(screen.getByText("Id: 48 State: South Dakota")).toBeVisible();
     });
   });
 
@@ -130,7 +127,7 @@ describe("AutoComplete", () => {
     const onFocus = jest.fn();
     const onBlur = jest.fn();
 
-    const { getByText, getByTestId } = render(
+    render(
       <AutoCompleteWrapper
         {...props}
         onBlur={onBlur}
@@ -139,18 +136,21 @@ describe("AutoComplete", () => {
       />
     );
 
-    const input = getByTestId(AUTOCOMPLETE_INPUT_TEST_ID);
+    const input = screen.getByTestId(AUTOCOMPLETE_INPUT_TEST_ID);
 
     await userEvent.type(input, "South Dakota");
     await userEvent.click(document.body);
 
     await waitFor(() => {
       expect(onFocus).toBeCalledTimes(1);
+    });
+
+    await waitFor(() => {
       expect(onBlur).toBeCalledTimes(1);
     });
 
     await userEvent.click(input);
-    await userEvent.click(getByText("South Dakota"));
+    await userEvent.click(screen.getByText("South Dakota"));
 
     await waitFor(() => {
       expect(onClick.mock.calls).toEqual([
@@ -160,14 +160,14 @@ describe("AutoComplete", () => {
   });
 
   test("should call onChange, onEnter", async () => {
-    const onChange = jest.fn<any, any>((value: string) => undefined);
+    const onChange = jest.fn<any, any>((_value: string) => undefined);
     const onEnter = jest.fn();
 
-    const { getByTestId } = render(
+    render(
       <AutoCompleteWrapper {...props} onChange={onChange} onEnter={onEnter} />
     );
 
-    const input = getByTestId(AUTOCOMPLETE_INPUT_TEST_ID);
+    const input = screen.getByTestId(AUTOCOMPLETE_INPUT_TEST_ID);
 
     await userEvent.type(input, "South Dakota");
 
@@ -179,22 +179,19 @@ describe("AutoComplete", () => {
   test("should call onEnter", async () => {
     const onEnter = jest.fn();
 
-    const { getByTestId } = await render(
-      <AutoCompleteWrapper {...props} onEnter={onEnter} />
-    );
+    render(<AutoCompleteWrapper {...props} onEnter={onEnter} />);
 
-    const input = getByTestId(AUTOCOMPLETE_INPUT_TEST_ID);
+    const input = screen.getByTestId(AUTOCOMPLETE_INPUT_TEST_ID);
 
     await userEvent.type(input, "south");
 
-    const list = getByTestId(AUTOCOMPLETE_LIST_TEST_ID);
-
     await waitFor(async () => {
-      expect(list.children).toHaveLength(2);
-
+      expect(screen.getAllByRole("listitem")).toHaveLength(2);
       await userEvent.keyboard("{arrowdown}");
       await userEvent.keyboard("{enter}");
+    });
 
+    await waitFor(() => {
       expect(onEnter).lastCalledWith({
         id: "48",
         label: "South Dakota",
@@ -203,21 +200,19 @@ describe("AutoComplete", () => {
   });
 
   test("should make item active when hovered and arrow downed", async () => {
-    const { getByTestId, getByText, getByRole } = await render(
-      <AutoCompleteWrapper {...props} />
-    );
+    render(<AutoCompleteWrapper {...props} />);
 
-    const input = getByTestId(AUTOCOMPLETE_INPUT_TEST_ID);
+    const input = screen.getByTestId(AUTOCOMPLETE_INPUT_TEST_ID);
 
     await userEvent.type(input, "A");
 
     await waitFor(async () => {
-      const californiaItem = getByText("California");
+      const californiaItem = screen.getByText("California");
 
       await userEvent.hover(californiaItem);
       await userEvent.keyboard("{arrowdown}");
 
-      expect(getByRole("listitem", { current: true })).toHaveTextContent(
+      expect(screen.getByRole("listitem", { current: true })).toHaveTextContent(
         "Colorado"
       );
     });
