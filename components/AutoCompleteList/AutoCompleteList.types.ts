@@ -8,6 +8,7 @@ export interface AutoCompleteListProps<S> {
   selected?: number;
   listRef: MutableRefObject<HTMLUListElement | null>;
   onClickItem?: (searchValue: string, index: number) => () => void;
+  setActive: (index: number) => void;
   renderItem?: (props: S) => React.ReactElement;
   itemClassName?: string;
   listClassName?: string;

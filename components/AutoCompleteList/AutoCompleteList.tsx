@@ -9,6 +9,7 @@ import s from "./AutoCompleteList.module.scss";
 export const AutoCompleteList = <S,>({
   suggestions,
   renderItem,
+  setActive,
   active,
   selected,
   onClickItem,
@@ -41,6 +42,8 @@ export const AutoCompleteList = <S,>({
     [selected, listRef]
   );
 
+  const onMouseOverHandler = (index: number) => () => setActive(index);
+
   if (suggestions.length)
     return (
       <ul
@@ -54,6 +57,7 @@ export const AutoCompleteList = <S,>({
             role="listitem"
             aria-current={index === active}
             onClick={onClickItem && onClickItem(suggestion.label, index)}
+            onMouseOver={onMouseOverHandler(index)}
             className={cx(s.list_item, itemClassName, {
               [s.list_item__active]: index === active,
               [s.list_item__selected]: index === selected,

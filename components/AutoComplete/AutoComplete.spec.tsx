@@ -201,4 +201,25 @@ describe("AutoComplete", () => {
       });
     });
   });
+
+  test("should make item active when hovered and arrow downed", async () => {
+    const { getByTestId, getByText, getByRole } = await render(
+      <AutoCompleteWrapper {...props} />
+    );
+
+    const input = getByTestId(AUTOCOMPLETE_INPUT_TEST_ID);
+
+    await userEvent.type(input, "A");
+
+    await waitFor(async () => {
+      const californiaItem = getByText("California");
+
+      await userEvent.hover(californiaItem);
+      await userEvent.keyboard("{arrowdown}");
+
+      expect(getByRole("listitem", { current: true })).toHaveTextContent(
+        "Colorado"
+      );
+    });
+  });
 });
