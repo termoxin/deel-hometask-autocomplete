@@ -3,10 +3,8 @@ import { useCallback, useMemo, useState } from "react";
 
 import { PlacesResponse, Place } from "types/index";
 
-import { AutoComplete } from "@/components/AutoComplete";
-
 import s from "@/pages/index.module.scss";
-import { AutoCompletePlaceItem } from "@/components/AutoCompletePlaceItem";
+import { AutoCompletePlaces } from "@/components/AutoCompletePlaces/AutoCompletePlaces";
 
 export default function Index() {
   const [suggestions, setSuggestions] = useState<PlacesResponse>([]);
@@ -46,13 +44,6 @@ export default function Index() {
     return value?.toString();
   }, []);
 
-  const renderPlaceItem = useCallback(
-    (place: Place, search?: string) => (
-      <AutoCompletePlaceItem place={place} search={search} />
-    ),
-    []
-  );
-
   const properties = selectedSuggestion?.properties;
 
   return (
@@ -63,10 +54,9 @@ export default function Index() {
       </Head>
 
       <main>
-        <AutoComplete
+        <AutoCompletePlaces
           inputPlaceholder="Type a place name..."
           suggestions={transformedSuggestions}
-          renderItem={renderPlaceItem}
           onChange={(searchValue) => fetchSuggestions(searchValue)}
           throttleTime={500}
           listClassName={s.custom_autocomplete_list}

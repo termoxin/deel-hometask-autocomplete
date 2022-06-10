@@ -3,7 +3,6 @@ import { FC, memo } from "react";
 import { AutoCompletePlaceItemProps } from "./AutoCompletePlaceItem.types";
 
 import s from "./AutoCompletePlaceItem.module.scss";
-import { removeAccents } from "@/utils/removeAccents";
 import { Highlighter } from "../Hightlighter";
 
 const AutoCompletePlaceItemComponent: FC<AutoCompletePlaceItemProps> = ({
