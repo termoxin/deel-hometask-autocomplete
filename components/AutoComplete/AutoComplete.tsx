@@ -3,6 +3,7 @@ import {
   KeyboardEvent,
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -11,7 +12,14 @@ import cx from "classnames";
 import { AutoCompleteProps } from "./AutoComplete.types";
 import { throttle } from "@/utils/throttle";
 
-import { AUTOCOMPLETE_INPUT_TEST_ID } from "./AutoComplete.constant";
+import {
+  ariaAccessbilityAttrs,
+  ARIA_LABELLED_BY,
+  AUTOCOMPLETE_INPUT_TEST_ID,
+  AUTOCOMPLETE_LABEL_ID,
+  AUTOCOMPLETE_SELECT_ID,
+  inputAccessbilityAttrs,
+} from "./AutoComplete.constant";
 
 import s from "./AutoComplete.module.scss";
 import { SuggestionBaseProps } from "@/types/index";
@@ -33,7 +41,7 @@ export const AutoComplete = <S,>({
   listClassName,
   itemClassName,
 }: AutoCompleteProps<S>) => {
-  const [active, setActive] = useState(0);
+  const [active, setActive] = useState<number>(0);
   const [selected, setSelected] = useState<number | undefined>(undefined);
   const [isShow, setIsShow] = useState(false);
   const [input, setInput] = useState("");
@@ -106,17 +114,17 @@ export const AutoComplete = <S,>({
   }, [setIsShow, onFocus]);
 
   const onEnterHandler = useCallback(() => {
-    if (suggestions[active] && input) {
+    if (suggestions[active] && input && isShow) {
       setActive(0);
       setIsShow(false);
       setSelected(active);
       setInput(suggestions[active].label);
     }
 
-    if (onEnter && suggestions[active] && input) {
+    if (onEnter && suggestions[active] && input && isShow) {
       onEnter(suggestions[active]);
     }
-  }, [suggestions, active, input, onEnter, setInput, setActive, setIsShow]);
+  }, [suggestions, active, input, isShow, onEnter]);
 
   const onArrowUpHandler = useCallback(() => {
     if (active === 0) {
@@ -148,20 +156,75 @@ export const AutoComplete = <S,>({
     [onEnterHandler, onArrowUpHandler, onArrowDownHandler]
   );
 
-  const onClickInputHandler = () => setIsShow(true);
+  const isSelectedOption = useCallback(
+    (suggestion: S & SuggestionBaseProps) =>
+      typeof selected !== "undefined" &&
+      suggestions.find((s) => s?.id === suggestions?.[selected]?.id)?.id ===
+        suggestion.id,
+    [selected, suggestions]
+  );
+
+  const inputActiveDescendant = useMemo(
+    () => (isShow ? suggestions?.[active]?.label : undefined),
+    [active, isShow, suggestions]
+  );
 
   return (
-    <div className={cx(s.autocomplete, className)} ref={autoCompleteRef}>
+    <div
+      className={cx(s.autocomplete, className)}
+      ref={autoCompleteRef}
+      {...ariaAccessbilityAttrs}
+      aria-expanded={isShow}
+    >
+      <label
+        className={s.autocomplete_label}
+        htmlFor={AUTOCOMPLETE_SELECT_ID}
+        id={AUTOCOMPLETE_LABEL_ID}
+      >
+        {inputPlaceholder}
+      </label>
+      <select
+        defaultValue=""
+        className={s.autocomplete_select}
+        aria-hidden="true"
+        tabIndex={-1}
+        name={AUTOCOMPLETE_SELECT_ID}
+        id={ARIA_LABELLED_BY}
+      >
+        {suggestions.map((suggestion) => {
+          const selectedOption = isSelectedOption(suggestion);
+
+          return (
+            <option
+              selected={selectedOption}
+              aria-selected={selectedOption}
+              key={suggestion.id}
+              value={suggestion.label}
+            >
+              {suggestion.label}
+            </option>
+          );
+        })}
+      </select>
       <input
+        type="text"
+        // since accessbility attributes dictionary used eslint error occurs
+        // eslint-disable-next-line jsx-a11y/role-has-required-aria-props
+        role="combobox"
+        tabIndex={0}
+        autoComplete="off"
+        autoCorrect="off"
+        spellCheck="false"
+        {...inputAccessbilityAttrs}
+        aria-expanded={isShow}
+        aria-activedescendant={inputActiveDescendant}
         data-testid={AUTOCOMPLETE_INPUT_TEST_ID}
         className={cx(s.autocomplete_input, inputClass)}
-        type="text"
         value={input}
         placeholder={inputPlaceholder}
         onChange={onChangeHandler}
         onKeyDown={onKeyDownHandler}
         onFocus={onFocusHandler}
-        onClick={onClickInputHandler}
         onBlur={onBlur}
       />
       {isShow && input && (

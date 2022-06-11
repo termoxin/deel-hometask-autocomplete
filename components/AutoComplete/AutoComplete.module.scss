@@ -6,6 +6,11 @@
     width: calc(280px + 1rem);
   }
 
+  &_select,
+  &_label {
+    display: none;
+  }
+
   &_input {
     padding: 15px;
     width: 100%;

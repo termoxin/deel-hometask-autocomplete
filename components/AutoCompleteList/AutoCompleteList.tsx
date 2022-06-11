@@ -1,7 +1,11 @@
 import cx from "classnames";
 import { useCallback, useEffect, useLayoutEffect } from "react";
 
-import { AUTOCOMPLETE_LIST_TEST_ID } from "../AutoComplete/AutoComplete.constant";
+import {
+  ARIA_AUTOCOMPLETE_MENU,
+  ARIA_LABELLED_BY,
+  AUTOCOMPLETE_LIST_TEST_ID,
+} from "../AutoComplete/AutoComplete.constant";
 import { AutoCompleteListProps } from "./AutoCompleteList.types";
 
 import s from "./AutoCompleteList.module.scss";
@@ -39,15 +43,18 @@ export const AutoCompleteList = <S,>({
   if (suggestions.length)
     return (
       <ul
+        role="listbox"
         data-testid={AUTOCOMPLETE_LIST_TEST_ID}
         className={cx(s.list, listClassName)}
+        aria-controls={ARIA_AUTOCOMPLETE_MENU}
+        aria-labelledby={ARIA_LABELLED_BY}
         ref={listRef}
       >
         {suggestions.map((suggestion, index) => (
           <li
             key={suggestion.id}
-            role="listitem"
-            aria-current={index === active}
+            role="option"
+            aria-selected={index === selected}
             onClick={onClickItem && onClickItem(suggestion.label, index)}
             onMouseOver={onMouseOverHandler(index)}
             className={cx(s.list_item, itemClassName, {
