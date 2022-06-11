@@ -35,6 +35,18 @@ In your terminal, run the following command:
 > yarn start
 ```
 
+## Run Jest tests
+
+```bash
+yarn test
+```
+
+## Run Storybook
+
+```bash
+yarn storybook
+```
+
 ## 📄 Task
 
 1. You cannot use any 3rd party libraries - only pure React and internal DOM functions.
@@ -49,14 +61,6 @@ In your terminal, run the following command:
 10. Add a README.md file explaining how to run the project.
 11. Bonus #1: load data using a real API call to some resource.
 
-## Run Jest tests
+## ❓ Questions
 
-```bash
-yarn test
-```
-
-## Run Storybook
-
-```bash
-yarn storybook
-```
+[Show answered questions](./questions.md)
