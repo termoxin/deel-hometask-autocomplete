@@ -1,15 +1,17 @@
 # Awesome AutoComplete component
 
-This application shows how
+This application shows example with WAI-ARIA compliant React autocomplete component.
+<br />
+<a href="https://awesome-autocomplete.vercel.app" target="_blank">DEMO</a>
 
-This includes Next.js' built-in support for Global CSS, CSS Modules and TypeScript.
+
 
 ## 🚀 Quick start
 
 In your terminal, run the following command:
 
 ```bash
-# Set proper Yarn version
+# Set Yarn 3 version since the project uses PnP (Plug'n'Play)
 > yarn set version berry
 
 # Install dependencies
@@ -22,7 +24,8 @@ In your terminal, run the following command:
 
 > cp .env.example .env.local
 
-## Credentials that are saved in .env.example are public, so it's safe to have them in there, but in case you're gonna have your own credentials, DON'T store them in .env.example
+## Credentials that are saved in .env.example are public, so it's safe to have them in there,
+## but in case you're gonna have your own credentials, DON'T store them in .env.example
 
 # Start app in dev
 > yarn dev
@@ -46,8 +49,14 @@ In your terminal, run the following command:
 10. Add a README.md file explaining how to run the project.
 11. Bonus #1: load data using a real API call to some resource.
 
-## Run Jest Tests
+## Run Jest tests
 
 ```bash
 yarn test
+```
+
+## Run Storybook
+
+```bash
+yarn storybook
 ```
