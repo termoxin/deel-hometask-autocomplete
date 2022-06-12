@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { within } from "@testing-library/dom";
+import { getByAltText, within } from "@testing-library/dom";
 import { FC } from "react";
 
 import { AutoComplete } from "./";
@@ -89,27 +89,19 @@ describe("AutoComplete", () => {
     expect(getByText("South Carolina")).toBeVisible();
     expect(getByText("Missouri")).toBeVisible();
 
-    console.log(getByText("Missouri"));
-    // expect(getByText("Missouri")).toHaveAttribute(
-    //   "aria-activedescendant",
-    //   "Missouri"
-    // );
+    expect(input).toHaveAttribute("aria-activedescendant", "Missouri");
 
     await userEvent.keyboard("{arrowdown}");
     await userEvent.keyboard("{arrowdown}");
     await userEvent.keyboard("{arrowdown}");
     await userEvent.keyboard("{arrowdown}");
 
-    expect(screen.getByRole("listitem", { selected: true })).toHaveTextContent(
-      "South Carolina"
-    );
+    expect(input).toHaveAttribute("aria-activedescendant", "South Carolina");
 
     await userEvent.keyboard("{arrowup}");
     await userEvent.keyboard("{arrowup}");
 
-    expect(screen.getByRole("listitem", { current: true })).toHaveTextContent(
-      "South Dakota"
-    );
+    expect(input).toHaveAttribute("aria-activedescendant", "South Dakota");
   });
 
   test("should render custom item", async () => {
@@ -162,9 +154,11 @@ describe("AutoComplete", () => {
 
     await userEvent.click(input);
 
-    await waitFor(async () => {
-      await userEvent.click(screen.getByText("South Dakota"));
-    });
+    const list = screen.getByTestId(AUTOCOMPLETE_LIST_TEST_ID);
+    const { getByText } = within(list);
+
+    await userEvent.click(input);
+    await userEvent.click(getByText("South Dakota"));
 
     await waitFor(() => {
       expect(onClick.mock.calls).toEqual([
@@ -221,14 +215,16 @@ describe("AutoComplete", () => {
     await userEvent.type(input, "A");
 
     await waitFor(async () => {
-      const californiaItem = screen.getByText("California");
+      const { getByText } = within(
+        screen.getByTestId(AUTOCOMPLETE_LIST_TEST_ID)
+      );
+
+      const californiaItem = getByText("California");
 
       await userEvent.hover(californiaItem);
       await userEvent.keyboard("{arrowdown}");
 
-      expect(screen.getByRole("listitem", { current: true })).toHaveTextContent(
-        "Colorado"
-      );
+      expect(input).toHaveAttribute("aria-activedescendant", "Colorado");
     });
   });
 });
