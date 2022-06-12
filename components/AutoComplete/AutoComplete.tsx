@@ -24,7 +24,7 @@ import {
 import s from "./AutoComplete.module.scss";
 import { SuggestionBaseProps } from "@/types/index";
 import { AutoCompleteList } from "../AutoCompleteList/AutoCompleteList";
-import { DEFAULT_THROTTLE_TIME } from "@/constant";
+import { DEFAULT_AUTOCOMPLETE_THROTTLE_TIME } from "@/constant";
 
 export const AutoComplete = <S,>({
   suggestions,
@@ -219,7 +219,7 @@ export const AutoComplete = <S,>({
       </select>
       <input
         type="text"
-        // since accessbility attributes dictionary used eslint error occurs
+        // since accessbility attributes dictionary used eslint doesn't work occurs
         // eslint-disable-next-line jsx-a11y/role-has-required-aria-props
         role="combobox"
         tabIndex={0}
@@ -259,6 +259,6 @@ export const AutoComplete = <S,>({
 AutoComplete.defaultProps = {
   inputPlaceholder: "",
   suggestions: [],
-  throttleTime: DEFAULT_THROTTLE_TIME,
+  throttleTime: DEFAULT_AUTOCOMPLETE_THROTTLE_TIME,
   renderItem: (suggestion: SuggestionBaseProps) => <>{suggestion.label}</>,
 };

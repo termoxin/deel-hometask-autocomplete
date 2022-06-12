@@ -6,6 +6,7 @@ import { PlacesResponse, Place } from "types/index";
 import s from "@/pages/index.module.scss";
 import { AutoCompletePlaces } from "@/components/AutoCompletePlaces/AutoCompletePlaces";
 import { usePlaces } from "@/hooks/usePlaces";
+import { DEFAULT_AUTOCOMPLETE_PLACES_THROTTLE_TIME } from "@/constant";
 
 export default function Index() {
   const { places, fetchData } = usePlaces();
@@ -39,7 +40,7 @@ export default function Index() {
             inputPlaceholder="Type a place name..."
             suggestions={places}
             onChange={(searchValue) => fetchData(searchValue)}
-            throttleTime={500}
+            throttleTime={DEFAULT_AUTOCOMPLETE_PLACES_THROTTLE_TIME}
             listClassName={s.custom_autocomplete_list}
             onEnter={onSelected}
             onClick={onSelected}
