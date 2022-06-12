@@ -7,6 +7,8 @@ import { mockSuggestions } from "@/components/AutoComplete/AutoComplete.mock";
 import { AutoCompleteProps } from "@/components/AutoComplete/AutoComplete.types";
 import { useMockedAsyncSuggestionsProps } from "@/test-helpers/suggestions";
 
+import s from "./AutoCompleteStory.module.scss";
+
 export default {
   title: "Example/AutoComplete",
   component: AutoComplete,
@@ -24,7 +26,6 @@ export const Primary = Template.bind({});
 
 Primary.args = {
   suggestions: mockSuggestions,
-  renderItem: (suggestion: SuggestionBaseProps) => <>{suggestion.label}</>,
 };
 
 export const WithPlaceholder = Template.bind({});
@@ -32,7 +33,17 @@ export const WithPlaceholder = Template.bind({});
 WithPlaceholder.args = {
   suggestions: mockSuggestions,
   inputPlaceholder: "Enter country name...",
-  renderItem: (suggestion: SuggestionBaseProps) => <>{suggestion.label}</>,
+};
+
+export const CustomizedStyles = Template.bind({});
+
+CustomizedStyles.args = {
+  suggestions: mockSuggestions,
+  className: s.custom_autocomplete_container,
+  inputClass: s.custom_input,
+  itemClassName: s.custom_item,
+  listClassName: s.custom_list,
+  inputPlaceholder: "Enter country name...",
 };
 
 export const CustomizedItem = Template.bind({});
