@@ -252,4 +252,10 @@ describe("AutoComplete", () => {
       expect(input).toHaveAttribute("aria-expanded", "false");
     });
   });
+
+  test("should hide autocomplete list on Tab and Escape buttons", async () => {
+    render(<AutoCompleteWrapper {...props} loading />);
+
+    expect(screen.getByRole("status")).toBeInTheDocument();
+  });
 });

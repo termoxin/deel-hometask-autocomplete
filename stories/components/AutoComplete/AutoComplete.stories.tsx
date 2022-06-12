@@ -8,6 +8,7 @@ import { AutoCompleteProps } from "@/components/AutoComplete/AutoComplete.types"
 import { useMockedAsyncSuggestionsProps } from "@/test-helpers/suggestions";
 
 import s from "./AutoCompleteStory.module.scss";
+import { DEFAULT_AUTOCOMPLETE_THROTTLE_TIME } from "@/constant";
 
 export default {
   title: "Example/AutoComplete",
@@ -15,10 +16,17 @@ export default {
 } as ComponentMeta<typeof AutoComplete>;
 
 const Template: ComponentStory<FC<AutoCompleteProps>> = (args) => {
-  const { suggestions, onChange } = useMockedAsyncSuggestionsProps();
+  const { suggestions, isLoading, onChange } =
+    useMockedAsyncSuggestionsProps(true);
 
   return (
-    <AutoComplete {...args} suggestions={suggestions} onChange={onChange} />
+    <AutoComplete
+      {...args}
+      suggestions={suggestions}
+      loading={typeof args.loading !== "undefined" ? args.loading : isLoading}
+      onChange={onChange}
+      throttleTime={DEFAULT_AUTOCOMPLETE_THROTTLE_TIME}
+    />
   );
 };
 
@@ -57,4 +65,11 @@ CustomizedItem.args = {
       <b>🌍{suggestion.label}</b>
     </p>
   ),
+};
+
+export const Loading = Template.bind({});
+
+Loading.args = {
+  suggestions: mockSuggestions,
+  loading: true,
 };

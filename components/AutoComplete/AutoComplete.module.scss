@@ -12,9 +12,9 @@
   }
 
   &_spinner {
-    bottom: 38px;
-    position: relative;
+    position: absolute;
     left: calc(100% - 50px);
+    top: 12px;
   }
 
   &_input {
