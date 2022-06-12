@@ -15,6 +15,11 @@ module.exports = {
   core: {
     builder: "@storybook/builder-webpack5",
   },
+  resolve: {
+    fallback: {
+      util: require.resolve("util"),
+    },
+  },
   webpackFinal: async (config) => {
     config.resolve.alias = {
       ...config.resolve.alias,

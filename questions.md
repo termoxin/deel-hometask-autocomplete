@@ -2,7 +2,7 @@
 
 ## 1. What is the difference between Component and PureComponent? give an example where it might break my app.
 
-React.Component and React.PureComponent are similar, but differ only in the `shouldComponentUpdate` life cycle method, which is implemented by default in PureComponent. You can use shouldComponentUpdate in React.Component and implement the same logic to make it behave the same as PureComponent.
+React.Component and React.PureComponent are similar but differ only in the `shouldComponentUpdate` life cycle method, which is implemented by default in PureComponent. You can use shouldComponentUpdate in React.Component and implement the same logic to make it behave the same as PureComponent.
 
 Honestly, I don't think PureComponent will break the application, but since PureComponent uses shallow comparison and checks only values and references to objects.
 
@@ -10,16 +10,16 @@ Honestly, I don't think PureComponent will break the application, but since Pure
 
 It's dangerous since components as consumers re-renders when their provider data updates. Also, shouldComponentUpdate hook doesn't work on Consumers
 
-To get around and solve this problem you need to create a new component that's gonna take consumers props and implement shouldComponentUpdate
+To get around and solve this problem you need to create a new component that's gonna take consumers' props and implement shouldComponentUpdate
 
 Honestly, I can be wrong since I haven't used the `shouldComponentUpdate` life cycle method for a year or two 🙂
 
 ## 3. Describe 3 ways to pass information from a component to its PARENT.
 
 1. Context API with setter function
-2. Callbacks. For example, a parent passes a callback function to child and child invokes the callback and pass specific arguments and then these arguments can be used to communicate with parent or set its state
+2. Callbacks. For example, a parent passes a callback function to a child and the child invokes the callback and passes specific arguments and then these arguments can be used to communicate with the parent or set its state
 3. Forwarding ref
-4. Bonus: State management libraries (Redux, MobX, XState and so on)
+4. Bonus: State management libraries (Redux, MobX, XState, and so on)
 
 ## 4. Give 2 ways to prevent components from re-rendering.
 
@@ -30,11 +30,11 @@ Honestly, I can be wrong since I haven't used the `shouldComponentUpdate` life c
 
 ## 5. What is a fragment and why do we need it? Give an example where it might break my app.
 
-It's a React wrapper that helps to get together a few elements without creating additional dom element. For instance, if you want to add additional dom element without creating a new dom element, you can use React.Fragment component or its shortcut <></>
+It's a React wrapper that helps to get together a few elements without creating additional dom elements. For instance, if you want to add an additional dom element without creating a new dom element, you can use React.Fragment component or its shortcut <></>
 
-It also can be used for passing ref for a group of components without a parent.
+It also can be used for the passing ref for a group of components without a parent.
 
-Fortunately, I don't remember cases where fragment brake my app, but I remember the case when I was using UI library and styles wasn't applied before to list items until I removed fragment. So, I think there were some problems with UI library because it didn't handle the case
+Fortunately, I don't remember cases where fragment brakes my app, but I remember the case when I was using the UI library and styles wasn't applied before to list items until I removed fragment. So, I think there were some problems with the UI library because it didn't handle the case
 
 ## 6. Give 3 examples of the HOC pattern.
 
@@ -57,9 +57,9 @@ const withLoading = <P extends object>(Component: React.ComponentType<P>) =>
   };
 ```
 
-Personally, I prefer React hooks over HOCs, but there are always legacy code out here that uses class components 😜
+Personally, I prefer React hooks over HOCs, but there is always legacy code out here that uses class components 😜
 
-You know, there's phrase from one of the Marvel movies. `A wise king never seeks out war, but he must always be ready for it`, the same thing with class components `A wise developer never seeks out to write class component, but he must always be ready for maintaining them`
+You know, there's a phrase from one of the Marvel movies. `A wise king never seeks out war, but he must always be ready for it`, the same thing with class components `A wise developer never seeks out to write a class component, but he must always be ready for maintaining them`
 
 ## 7. What's the difference in handling exceptions in promises, callbacks and async...await.
 
@@ -69,19 +69,19 @@ You know, there's phrase from one of the Marvel movies. `A wise king never seeks
 
 ## 8. How many arguments does setState take and why is it async.
 
-setState takes two arguments: first – the new state, the second is function which will run after changing the state
+setState takes two arguments: first – the new state, and the second is a function which will run after changing the state
 
-You can also pass function like this: (oldState) => {} instead of the new state, for getting the latest state and modify him
+You can also pass a function like this: (oldState) => {} instead of the new state, for getting the latest state and modify him
 
 Async because React waits for all calls setState and you can get an old state in another place for preventing re-renders. If re-render not was fired and you need the latest real state you can use setState with function in the first argument, as I showed above.
 
-Also, it's optimization thing. React sets state asynchronously since setting state can be an expensive operation. Asynchronous setState batches calls and makes a better user experience and performance
+Also, it's an optimization thing. React sets state asynchronously since setting state can be an expensive operation. Asynchronous setState batches calls and makes a better user experience and performance
 
 ## 9. List the steps needed to migrate a Class to Function Component.
 
 1. Replace class components with functions
 2. Remove the constructor with moving state to useState hook
-3. Replace life-cycles with useEffect
+3. Replace life cycles with useEffect
 4. Remove render() method and replace it `return`
 5. Change methods to functions and remove this context
 6. If it possible: replace HOCs with hooks, it will be more code friendly
@@ -96,4 +96,4 @@ Also, it's optimization thing. React sets state asynchronously since setting sta
 
 ## 11. How to render an HTML string coming from the server.
 
-This can be done with the `dangerouslySetInnerHTML` attribute attribute like dangerouslySetInnerHTML={ \_\_html: someEscapedHTML } for the parent element, it will appear your html from the server in children. But it's not safe solution. I'd rather recommend some well-tested and well-know third-party solutions (React Server Components, Next.js)
+This can be done with the `dangerouslySetInnerHTML` attribute attribute like dangerouslySetInnerHTML={ \_\_html: someEscapedHTML } for the parent element, it will appear your HTML from the server in children. But it's not a safe solution. I'd rather recommend some well-tested and well-known third-party solutions (React Server Components, Next.js)
