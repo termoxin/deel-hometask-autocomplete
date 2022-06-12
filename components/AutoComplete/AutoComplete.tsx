@@ -156,17 +156,29 @@ export const AutoComplete = <S,>({
     [onEnterHandler, onArrowUpHandler, onArrowDownHandler]
   );
 
+  const getSelectedOption = useCallback(
+    () =>
+      typeof selected !== "undefined"
+        ? suggestions.find((s) => s?.id === suggestions?.[selected]?.id)
+        : null,
+    [selected, suggestions]
+  );
+
   const isSelectedOption = useCallback(
     (suggestion: S & SuggestionBaseProps) =>
       typeof selected !== "undefined" &&
-      suggestions.find((s) => s?.id === suggestions?.[selected]?.id)?.id ===
-        suggestion.id,
-    [selected, suggestions]
+      getSelectedOption()?.id === suggestion.id,
+    [getSelectedOption, selected]
   );
 
   const inputActiveDescendant = useMemo(
     () => (isShow ? suggestions?.[active]?.label : undefined),
     [active, isShow, suggestions]
+  );
+
+  const selectedOptionLabel = useMemo(
+    () => getSelectedOption()?.label,
+    [getSelectedOption]
   );
 
   return (
@@ -184,19 +196,18 @@ export const AutoComplete = <S,>({
         {inputPlaceholder}
       </label>
       <select
-        defaultValue=""
         className={s.autocomplete_select}
         aria-hidden="true"
         tabIndex={-1}
         name={AUTOCOMPLETE_SELECT_ID}
         id={ARIA_LABELLED_BY}
+        value={selectedOptionLabel}
       >
         {suggestions.map((suggestion) => {
           const selectedOption = isSelectedOption(suggestion);
 
           return (
             <option
-              selected={selectedOption}
               aria-selected={selectedOption}
               key={suggestion.id}
               value={suggestion.label}
