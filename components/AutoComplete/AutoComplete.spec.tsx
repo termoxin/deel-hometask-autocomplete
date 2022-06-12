@@ -1,5 +1,6 @@
-import { getAllByRole, render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { within } from "@testing-library/dom";
 import { FC } from "react";
 
 import { AutoComplete } from "./";
@@ -52,16 +53,20 @@ describe("AutoComplete", () => {
 
     await userEvent.type(input, "South");
 
+    const list = screen.getByTestId(AUTOCOMPLETE_LIST_TEST_ID);
+
     await waitFor(() => {
-      expect(screen.getAllByRole("listitem")).toHaveLength(2);
+      expect(screen.getAllByRole("option")).toHaveLength(2);
+    });
+
+    const { getByText } = within(list);
+
+    await waitFor(() => {
+      expect(getByText("South Dakota")).toBeVisible();
     });
 
     await waitFor(() => {
-      expect(screen.getByText("South Dakota")).toBeVisible();
-    });
-
-    await waitFor(() => {
-      expect(screen.getByText("South Carolina")).toBeVisible();
+      expect(getByText("South Carolina")).toBeVisible();
     });
   });
 
@@ -73,14 +78,18 @@ describe("AutoComplete", () => {
     await userEvent.type(input, "Sou");
 
     await waitFor(() => {
-      expect(screen.getAllByRole("listitem")).toHaveLength(3);
+      expect(screen.getAllByRole("option")).toHaveLength(3);
     });
 
-    expect(screen.getByText("South Dakota")).toBeVisible();
-    expect(screen.getByText("South Carolina")).toBeVisible();
-    expect(screen.getByText("Missouri")).toBeVisible();
+    const list = screen.getByTestId(AUTOCOMPLETE_LIST_TEST_ID);
 
-    expect(screen.getByRole("listitem", { current: true })).toHaveTextContent(
+    const { getByText, getByRole } = within(list);
+
+    expect(getByText("South Dakota")).toBeVisible();
+    expect(getByText("South Carolina")).toBeVisible();
+    expect(getByText("Missouri")).toBeVisible();
+
+    expect(getByRole("option", { selected: true })).toHaveTextContent(
       "Missouri"
     );
 
@@ -89,7 +98,7 @@ describe("AutoComplete", () => {
     await userEvent.keyboard("{arrowdown}");
     await userEvent.keyboard("{arrowdown}");
 
-    expect(screen.getByRole("listitem", { current: true })).toHaveTextContent(
+    expect(screen.getByRole("listitem", { selected: true })).toHaveTextContent(
       "South Carolina"
     );
 

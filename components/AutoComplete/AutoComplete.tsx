@@ -13,8 +13,8 @@ import { AutoCompleteProps } from "./AutoComplete.types";
 import { throttle } from "@/utils/throttle";
 
 import {
-  ariaAccessbilityAttrs,
   ARIA_LABELLED_BY,
+  autoCompleteAccessbilityAttrs,
   AUTOCOMPLETE_INPUT_TEST_ID,
   AUTOCOMPLETE_LABEL_ID,
   AUTOCOMPLETE_SELECT_ID,
@@ -173,7 +173,7 @@ export const AutoComplete = <S,>({
     <div
       className={cx(s.autocomplete, className)}
       ref={autoCompleteRef}
-      {...ariaAccessbilityAttrs}
+      {...autoCompleteAccessbilityAttrs}
       aria-expanded={isShow}
     >
       <label
