@@ -227,4 +227,29 @@ describe("AutoComplete", () => {
       expect(input).toHaveAttribute("aria-activedescendant", "Colorado");
     });
   });
+
+  test("should hide autocomplete list on Tab and Escape buttons", async () => {
+    render(<AutoCompleteWrapper {...props} />);
+
+    const input = screen.getByTestId(AUTOCOMPLETE_INPUT_TEST_ID);
+
+    await userEvent.type(input, "A");
+
+    await waitFor(async () => {
+      expect(input).toHaveAttribute("aria-expanded", "true");
+    });
+
+    await userEvent.keyboard("{Tab}");
+
+    await waitFor(() => {
+      expect(input).toHaveAttribute("aria-expanded", "false");
+    });
+
+    await userEvent.type(input, "A");
+    await userEvent.keyboard("{Escape}");
+
+    await waitFor(() => {
+      expect(input).toHaveAttribute("aria-expanded", "false");
+    });
+  });
 });
