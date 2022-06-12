@@ -9,7 +9,8 @@ import {
 } from "react";
 import cx from "classnames";
 
-import { AutoCompleteProps } from "./AutoComplete.types";
+import { SuggestionBaseProps } from "@/types/index";
+import { AutoCompleteProps } from "./";
 import { throttle } from "@/utils/throttle";
 
 import {
@@ -22,9 +23,9 @@ import {
 } from "./AutoComplete.constant";
 
 import s from "./AutoComplete.module.scss";
-import { SuggestionBaseProps } from "@/types/index";
 import { AutoCompleteList } from "../AutoCompleteList/AutoCompleteList";
 import { DEFAULT_AUTOCOMPLETE_THROTTLE_TIME } from "@/constant";
+import { KEYBOARD } from "@/constant/keyboard";
 
 export const AutoComplete = <S,>({
   suggestions,
@@ -143,17 +144,21 @@ export const AutoComplete = <S,>({
     }
   }, [suggestions, active, setActive]);
 
+  const onTabOrEscapeHandler = useCallback(() => setIsShow(false), []);
+
   const onKeyDownHandler = useCallback(
     (e: KeyboardEvent<HTMLInputElement>) => {
-      if (e.code === "Enter") {
+      if (e.code === KEYBOARD.ENTER) {
         onEnterHandler();
-      } else if (e.code === "ArrowUp") {
+      } else if (e.code === KEYBOARD.ARROW_UP) {
         onArrowUpHandler();
-      } else if (e.code === "ArrowDown") {
+      } else if (e.code === KEYBOARD.ARROW_DOWN) {
         onArrowDownHandler();
+      } else if (e.code === KEYBOARD.ESC || e.code === KEYBOARD.TAB) {
+        onTabOrEscapeHandler();
       }
     },
-    [onEnterHandler, onArrowUpHandler, onArrowDownHandler]
+    [onEnterHandler, onArrowUpHandler, onArrowDownHandler, onTabOrEscapeHandler]
   );
 
   const getSelectedOption = useCallback(
@@ -219,7 +224,7 @@ export const AutoComplete = <S,>({
       </select>
       <input
         type="text"
-        // since accessbility attributes dictionary used eslint doesn't work occurs
+        // since accessbility attributes object used eslint doesn't work properly, it's a work around
         // eslint-disable-next-line jsx-a11y/role-has-required-aria-props
         role="combobox"
         tabIndex={0}
