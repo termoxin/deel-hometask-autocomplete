@@ -2,17 +2,21 @@ import { useCallback, useState } from "react";
 
 import { Place, SuggestionBaseProps } from "@/types/index";
 import { castPlacesToOptions } from "@/utils/castPlacesToOptions";
+import { buildUrl } from "@/utils/url";
+import { getCurrentNextApiUrl } from "@/utils/getNextApiUrl";
 
 export const usePlaces = () => {
-  const [places, setPlaces] = useState<(SuggestionBaseProps & Place)[0]>([]);
+  const [places, setPlaces] = useState<(SuggestionBaseProps & Place)[]>([]);
   const [error, setError] = useState<string | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(false);
 
-  const fetchPlaces = useCallback(
-    async (searchValue: string) =>
-      await fetch(`/api/places?search=${searchValue}`).then((r) => r.json()),
-    []
-  );
+  const fetchPlaces = useCallback(async (searchValue: string) => {
+    return await fetch(
+      buildUrl(`${getCurrentNextApiUrl()}/places`, {
+        search: searchValue,
+      })
+    ).then((r) => r.json());
+  }, []);
 
   const fetchData = useCallback(
     async (query: string) => {
@@ -31,7 +35,7 @@ export const usePlaces = () => {
           console.error(_error);
         })
         .finally(() => {
-          // stop loading
+          // stop loading whatever happened
           setIsLoading(false);
         });
     },
