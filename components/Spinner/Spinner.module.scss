@@ -1,0 +1,18 @@
+.loader {
+  color: rgb(229, 231, 235);
+  height: 25px;
+  width: 25px;
+  max-width: 100%;
+  max-height: 100%;
+  fill: var(--autocomplete-spinner-fill);
+  animation: spin 0.3s infinite linear;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(359deg);
+  }
+}

@@ -11,6 +11,12 @@
     display: none;
   }
 
+  &_spinner {
+    bottom: 38px;
+    position: relative;
+    left: calc(100% - 50px);
+  }
+
   &_input {
     padding: 15px;
     width: 100%;

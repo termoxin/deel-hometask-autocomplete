@@ -1,7 +1,7 @@
 import Head from "next/head";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useState } from "react";
 
-import { PlacesResponse, Place } from "types/index";
+import { Place } from "types/index";
 
 import s from "@/pages/index.module.scss";
 import { AutoCompletePlaces } from "@/components/AutoCompletePlaces/AutoCompletePlaces";
@@ -9,7 +9,7 @@ import { usePlaces } from "@/hooks/usePlaces";
 import { DEFAULT_AUTOCOMPLETE_PLACES_THROTTLE_TIME } from "@/constant";
 
 export default function Index() {
-  const { places, fetchData } = usePlaces();
+  const { places, isLoading, fetchData } = usePlaces();
   const [selectedSuggestion, setSelectedSuggestion] = useState<Place>();
 
   const onSelected = useCallback(
@@ -25,6 +25,15 @@ export default function Index() {
     return value?.toString();
   }, []);
 
+  const onAutoCompleteChange = useCallback(
+    (searchValue: string) => {
+      if (searchValue.trim()) {
+        fetchData(searchValue);
+      }
+    },
+    [fetchData]
+  );
+
   const properties = selectedSuggestion?.properties;
 
   return (
@@ -39,8 +48,9 @@ export default function Index() {
           <AutoCompletePlaces
             inputPlaceholder="Type a place name..."
             suggestions={places}
-            onChange={(searchValue) => fetchData(searchValue)}
+            onChange={onAutoCompleteChange}
             throttleTime={DEFAULT_AUTOCOMPLETE_PLACES_THROTTLE_TIME}
+            loading={isLoading}
             listClassName={s.custom_autocomplete_list}
             onEnter={onSelected}
             onClick={onSelected}

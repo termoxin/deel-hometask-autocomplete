@@ -26,9 +26,11 @@ import s from "./AutoComplete.module.scss";
 import { AutoCompleteList } from "../AutoCompleteList/AutoCompleteList";
 import { DEFAULT_AUTOCOMPLETE_THROTTLE_TIME } from "@/constant";
 import { KEYBOARD } from "@/constant/keyboard";
+import { Spinner } from "../Spinner";
 
 export const AutoComplete = <S,>({
   suggestions,
+  loading,
   inputPlaceholder,
   renderItem,
   onChange,
@@ -243,6 +245,7 @@ export const AutoComplete = <S,>({
         onFocus={onFocusHandler}
         onBlur={onBlur}
       />
+      {loading && <Spinner className={s.autocomplete_spinner} />}
       {isShow && input && (
         <AutoCompleteList
           suggestions={suggestions}
@@ -264,6 +267,7 @@ export const AutoComplete = <S,>({
 AutoComplete.defaultProps = {
   inputPlaceholder: "",
   suggestions: [],
+  loading: false,
   throttleTime: DEFAULT_AUTOCOMPLETE_THROTTLE_TIME,
   renderItem: (suggestion: SuggestionBaseProps) => <>{suggestion.label}</>,
 };

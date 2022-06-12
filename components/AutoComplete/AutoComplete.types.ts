@@ -8,6 +8,7 @@ export interface AutoCompleteProps<S = SuggestionBaseProps> {
   inputClass?: string;
   listClassName?: string;
   itemClassName?: string;
+  loading?: boolean;
   renderItem?: RenderItemFunction<S>;
   onChange?: (value: string) => void;
   onEnter?: (value: S) => void;
