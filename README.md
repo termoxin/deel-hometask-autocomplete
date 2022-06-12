@@ -4,13 +4,18 @@ This application shows example with WAI-ARIA compliant React autocomplete compon
 <br />
 <a href="https://awesome-autocomplete.vercel.app" target="_blank">DEMO</a>
 
-
-
 ## 🚀 Quick start
 
 In your terminal, run the following command:
 
 ```bash
+# Install Node.js v16.15.1
+> nvm install v16.15.15
+
+# Use Node.js v16.15.1 in the project
+
+> nvm use
+
 # Set Yarn 3 version since the project uses PnP (Plug'n'Play)
 > yarn set version berry
 
