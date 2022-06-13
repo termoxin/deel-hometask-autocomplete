@@ -53,6 +53,10 @@ In your terminal, run the following command:
 
 ```
 
+## VScode set up
+
+To make VScode working properly with TypeScript press `Command + Shift + P` select `TypeScript: Select TypeScript Version...` and click on `Use Workspace Version`
+
 ## Run Jest tests
 
 ```bash

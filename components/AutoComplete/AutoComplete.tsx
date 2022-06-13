@@ -79,6 +79,7 @@ export const AutoComplete = <S,>({
   const onChangeHandler = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       setActive(0);
+      setSelected(undefined);
       setIsShow(true);
       setInput(e.currentTarget.value);
 

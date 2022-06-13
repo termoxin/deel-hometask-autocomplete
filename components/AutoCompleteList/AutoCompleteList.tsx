@@ -62,7 +62,8 @@ export const AutoCompleteList = <S,>({
               [s.list_item__selected]: index === selected,
             })}
           >
-            {renderItem && renderItem(suggestion, input)}
+            {renderItem &&
+              renderItem(suggestion, selected === index ? "" : input)}
           </li>
         ))}
       </ul>
