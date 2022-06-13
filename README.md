@@ -1,6 +1,6 @@
 # Awesome AutoComplete component
 
-This Next.,js application shows an example of React autocomplete component.
+This Next.js application shows an example of React autocomplete component.
 Next.js is used as a server to hide the original source of data. In a real production application, I would use `X-Application-Key` header to detect the frontend client. In case `X-Application-Key` header is absent then the backend is not gonna send anything to this client. One thing, `X-Application-Key` should know only our frontend client and other trusted clients.
 
 The component has a great UX and developer experience, but there are always room for improvement. For instance:
