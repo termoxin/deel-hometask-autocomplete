@@ -6,6 +6,22 @@
     width: calc(280px + 1rem);
   }
 
+  &_nothing_found {
+    position: absolute;
+    background: var(--autocomplete-nothing-found-background);
+    color: var(--autocomplete-nothing-found-color);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    list-style: none;
+    margin-top: 0;
+    max-height: 216px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-left: 0;
+    border-radius: 0px 0px 7px 7px;
+    width: 100%;
+    padding: 20px;
+  }
+
   &_select,
   &_label {
     display: none;

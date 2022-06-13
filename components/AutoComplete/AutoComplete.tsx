@@ -260,6 +260,9 @@ export const AutoComplete = <S,>({
           itemClassName={itemClassName}
         />
       )}
+      {!loading && !suggestions.length && isShow && input && (
+        <div className={s.autocomplete_nothing_found}>Nothing found</div>
+      )}
     </div>
   );
 };
