@@ -1,6 +1,7 @@
 :root {
   --white: #fff;
   --gray: #999;
+  --red: #ff5252;
   --blue: #f2f9fc;
   --yellow: yellow;
   --quartz: #4c4c4c;
@@ -13,6 +14,7 @@
 
   --autocomplete-list-background: var(--white);
   --autocomplete-list-color: var(--quartz);
+  --autocomplete-list-error-color: var(--red);
 
   --autocomplete-nothing-found-background: var(--white);
   --autocomplete-nothing-found-color: var(--quartz);

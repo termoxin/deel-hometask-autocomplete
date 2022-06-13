@@ -32,6 +32,7 @@ export const usePlaces = () => {
         setPlaces(castPlacesToOptions(data));
       } catch (err) {
         setError((err as Error).message);
+        setPlaces([]);
         console.error(err as Error);
       } finally {
         setIsLoading(false);

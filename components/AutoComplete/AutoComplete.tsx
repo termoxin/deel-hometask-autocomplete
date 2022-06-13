@@ -190,6 +190,23 @@ export const AutoComplete = <S,>({
     [getSelectedOption]
   );
 
+  const getStatusBlock = useCallback(() => {
+    if (!loading && !suggestions.length && !error && isShow && input.trim()) {
+      return <div className={s.autocomplete_information}>Nothing found</div>;
+    } else if (error && input.trim()) {
+      return (
+        <div
+          className={cx(
+            s.autocomplete_information,
+            s.autocomplete_information__error
+          )}
+        >
+          {error}
+        </div>
+      );
+    }
+  }, [error, input, isShow, loading, suggestions.length]);
+
   return (
     <div
       className={cx(s.autocomplete, className)}
@@ -248,7 +265,7 @@ export const AutoComplete = <S,>({
         onBlur={onBlur}
       />
       {loading && <Spinner className={s.autocomplete_spinner} />}
-      {isShow && input && (
+      {isShow && input && !error && (
         <AutoCompleteList
           suggestions={suggestions}
           active={active}
@@ -262,12 +279,7 @@ export const AutoComplete = <S,>({
           itemClassName={itemClassName}
         />
       )}
-      {!loading && !suggestions.length && isShow && input && !error && (
-        <div className={s.autocomplete_nothing_found}>Nothing found</div>
-      )}
-      {!loading && error && (
-        <div className={s.autocomplete_nothing_found}>{error}</div>
-      )}
+      {getStatusBlock()}
     </div>
   );
 };

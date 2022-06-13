@@ -6,7 +6,7 @@
     width: calc(280px + 1rem);
   }
 
-  &_nothing_found {
+  &_information {
     position: absolute;
     background: var(--autocomplete-nothing-found-background);
     color: var(--autocomplete-nothing-found-color);
@@ -20,6 +20,10 @@
     border-radius: 0px 0px 7px 7px;
     width: 100%;
     padding: 20px;
+
+    &__error {
+      color: var(--autocomplete-list-error-color);
+    }
   }
 
   &_select,
