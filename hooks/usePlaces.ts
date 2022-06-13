@@ -15,29 +15,27 @@ export const usePlaces = () => {
       buildUrl(`${getCurrentNextApiUrl()}/places`, {
         search: searchValue,
       })
-    ).then((r) => r.json());
+    ).then((response) => response.json());
   }, []);
 
   const fetchData = useCallback(
     async (query: string) => {
-      if (!error) {
-        setError(undefined);
+      try {
+        if (!error) {
+          setError(undefined);
+        }
+
+        setIsLoading(true);
+
+        const data = await fetchPlaces(query);
+
+        setPlaces(castPlacesToOptions(data));
+      } catch (err) {
+        setError((err as Error).message);
+        console.error(err as Error);
+      } finally {
+        setIsLoading(false);
       }
-
-      setIsLoading(true);
-
-      await fetchPlaces(query)
-        .then((data) => {
-          setPlaces(castPlacesToOptions(data));
-        })
-        .catch((_error: Error) => {
-          setError(_error.message);
-          console.error(_error);
-        })
-        .finally(() => {
-          // stop loading whatever happened
-          setIsLoading(false);
-        });
     },
     [error, fetchPlaces]
   );

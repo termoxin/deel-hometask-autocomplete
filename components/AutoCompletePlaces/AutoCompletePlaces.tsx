@@ -13,5 +13,12 @@ export const AutoCompletePlaces: FC<AutoCompletePlacesProps> = (props) => {
     []
   );
 
-  return <AutoComplete {...props} renderItem={renderPlaceItem} />;
+  return (
+    <AutoComplete
+      {...props}
+      // don't show autocomplete list when there's an error
+      suggestions={props.error ? [] : props.suggestions}
+      renderItem={renderPlaceItem}
+    />
+  );
 };

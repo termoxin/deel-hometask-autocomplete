@@ -31,6 +31,7 @@ import { Spinner } from "../Spinner";
 export const AutoComplete = <S,>({
   suggestions,
   loading,
+  error,
   inputPlaceholder,
   renderItem,
   onChange,
@@ -260,8 +261,11 @@ export const AutoComplete = <S,>({
           itemClassName={itemClassName}
         />
       )}
-      {!loading && !suggestions.length && isShow && input && (
+      {!loading && !suggestions.length && isShow && input && !error && (
         <div className={s.autocomplete_nothing_found}>Nothing found</div>
+      )}
+      {!loading && error && (
+        <div className={s.autocomplete_nothing_found}>{error}</div>
       )}
     </div>
   );

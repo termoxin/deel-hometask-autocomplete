@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { Place } from "types/index";
 
@@ -9,7 +9,7 @@ import { usePlaces } from "@/hooks/usePlaces";
 import { DEFAULT_AUTOCOMPLETE_PLACES_THROTTLE_TIME } from "@/constant";
 
 export default function Index() {
-  const { places, isLoading, fetchData } = usePlaces();
+  const { places, isLoading, fetchData, error } = usePlaces();
   const [selectedSuggestion, setSelectedSuggestion] = useState<Place>();
 
   const onSelected = useCallback(
@@ -51,6 +51,7 @@ export default function Index() {
             onChange={onAutoCompleteChange}
             throttleTime={DEFAULT_AUTOCOMPLETE_PLACES_THROTTLE_TIME}
             loading={isLoading}
+            error={error}
             listClassName={s.custom_autocomplete_list}
             onEnter={onSelected}
             onClick={onSelected}
