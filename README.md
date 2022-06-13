@@ -1,7 +1,19 @@
 # Awesome AutoComplete component
 
-This application shows example with WAI-ARIA compliant React autocomplete component.
-<br />
+This Next.,js application shows an example of React autocomplete component.
+Next.js is used as a server to hide the original source of data. In a real production application, I would use `X-Application-Key` header to detect the frontend client. In case `X-Application-Key` header is absent then the backend is not gonna send anything to this client. One thing, `X-Application-Key` should know only our frontend client and other trusted clients.
+
+The component has a great UX and developer experience, but there are always room for improvement. For instance:
+
+- Make this component fully compliant to WAI-ARIA (even though this component can be detected and interacted by screen readers)
+- Improve tests coverage and quality
+- Get rid of redundant re-renders
+- Custom "Nothing is found" text label
+- Custom Spinner icon
+- Multiselection of items
+- Optionally available internal caching of elements
+- And so many other features ⭐
+
 <a href="https://awesome-autocomplete.vercel.app" target="_blank">DEMO</a>
 
 ## 🚀 Quick start
@@ -13,7 +25,6 @@ In your terminal, run the following command:
 > nvm install v16.15.15
 
 # Use Node.js v16.15.1 in the project
-
 > nvm use
 
 # Set Yarn 3 version since the project uses PnP (Plug'n'Play)
@@ -26,7 +37,6 @@ In your terminal, run the following command:
 > yarn dlx @yarnpkg/sdks vscode
 
 ## Copy .env.example and create .env.local to load environment variables
-
 > cp .env.example .env.local
 
 ## Credentials that are saved in .env.example are public, so it's safe to have them in there,
@@ -35,9 +45,12 @@ In your terminal, run the following command:
 # Start app in dev
 > yarn dev
 
-# Build and start production build
+# Create production build
 > yarn build
+
+# Start production build
 > yarn start
+
 ```
 
 ## Run Jest tests
@@ -47,6 +60,8 @@ yarn test
 ```
 
 ## Run Storybook
+
+If you would like to take a look at some components isolately from outside world you can run:
 
 ```bash
 yarn storybook
