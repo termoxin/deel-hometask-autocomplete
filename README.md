@@ -9,6 +9,7 @@ The component has a great UX and developer experience, but there are always room
 - Improve tests coverage and quality
 - Get rid of redundant re-renders
 - Custom "Nothing is found" text label
+- Create documentation for components and functions
 - Custom Spinner icon
 - Multiselection of items
 - Optionally available internal caching of elements
