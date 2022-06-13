@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { ComponentStory, ComponentMeta, Meta } from "@storybook/react";
 import { SuggestionBaseProps } from "@/types/index";
 
 import { AutoComplete } from "@/components/AutoComplete";
@@ -13,7 +13,7 @@ import { DEFAULT_AUTOCOMPLETE_THROTTLE_TIME } from "@/constant";
 export default {
   title: "Example/AutoComplete",
   component: AutoComplete,
-} as ComponentMeta<typeof AutoComplete>;
+} as Meta<typeof AutoComplete>;
 
 const Template: ComponentStory<FC<AutoCompleteProps>> = (args) => {
   const { suggestions, isLoading, onChange } =

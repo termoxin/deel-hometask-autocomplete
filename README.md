@@ -1,11 +1,11 @@
 # Awesome AutoComplete component
 
 This Next.js application shows an example of React autocomplete component.
-Next.js is used as a server to hide the original source of data. In a real production application, I would use `X-Application-Key` header to detect the frontend client. In case `X-Application-Key` header is absent then the backend is not gonna send anything to this client. One thing, `X-Application-Key` should know only our frontend client and other trusted clients.
+Next.js is used as a server to hide the source of data. In a real production application, I would use `X-Application-Key` header to detect the frontend client. In case `X-Application-Key` header is absent then the backend is not gonna send anything to this client. One thing, `X-Application-Key` should know only our frontend client and other trusted clients.
 
 The component has a great UX and developer experience, but there are always room for improvement. For instance:
 
-- Make this component fully compliant to WAI-ARIA (even though this component can be detected and interacted by screen readers)
+- Make this component fully compliant with WAI-ARIA (even though this component can be detected and interacted with by screen readers)
 - Improve tests coverage and quality
 - Get rid of redundant re-renders
 - Custom "Nothing is found" text label
@@ -66,7 +66,7 @@ yarn test
 
 ## Run Storybook
 
-If you would like to take a look at some components isolately from outside world you can run:
+If you would like to take a look at the documentation of components or you want to play around with components isolated from the outside world you can run:
 
 ```bash
 yarn storybook
