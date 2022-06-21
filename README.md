@@ -8,6 +8,7 @@ The component has a great UX and developer experience, but there are always room
 - Make this component fully compliant with WAI-ARIA (even though this component can be detected and interacted with by screen readers)
 - Improve tests coverage and quality
 - Provide better type safety
+- Add multiple occurrences in highlighting
 - Get rid of redundant re-renders (e.g. leverage `useReducer` hook to set a few pieces of state in one action)
 - Custom "Nothing is found" text label
 - Create documentation for components and functions
