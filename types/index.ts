@@ -31,6 +31,14 @@ export interface Place {
 
 export type PlacesResponse = Place[];
 
+export type GetPlacesResponse = {
+  features: {
+    id: string;
+    place_name: string;
+    properties: Record<string, any>;
+  }[];
+};
+
 export type SuggestionBaseProps = {
   id: string;
   label: string;

@@ -1,11 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
+import { GetPlacesResponse } from "@/types/index";
 import { buildUrl } from "@/utils/url";
 import { DEFAULT_PLACES_FETCHING_LIMIT } from "constant";
 
 export default async function places(
   req: NextApiRequest,
-  res: NextApiResponse<unknown>
+  res: NextApiResponse
 ): Promise<void> {
   const { method, query } = req;
   const { search, limit } = query;
@@ -23,10 +24,12 @@ export default async function places(
         searchParamsDictionary
       );
 
-      const response = await fetch(builtUrl).then((r) => r.json());
+      const { features }: GetPlacesResponse = await fetch(builtUrl).then((r) =>
+        r.json()
+      );
 
       return res.send(
-        response.features?.map(({ id, place_name, properties }: any) => ({
+        features?.map(({ id, place_name, properties }) => ({
           id,
           placeName: place_name,
           properties: properties,
